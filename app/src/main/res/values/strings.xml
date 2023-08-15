@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">QLQA</string>
+    <string name="login">Đăng nhập</string>
+    <string name="Phone">0365790188</string>
+    <string name="username">Tên đăng nhập</string>
+    <string name="password">Mật khẩu</string>
+</resources>
