@@ -18,6 +18,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("info");
 
-        tv_username.setText(bundle.getString("username"));
+        tv_username.setText("Hello " + bundle.getString("username"));
     }
 }
