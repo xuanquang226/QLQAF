@@ -14,10 +14,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
 
-        TextView tv_username = (TextView) findViewById(R.id.tv_username);
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("info");
 
-        tv_username.setText(bundle.getString("username"));
+        TextView tv_user = (TextView) findViewById(R.id.tv_name);
+        tv_user.setText(bundle.getString("username"));
     }
 }

@@ -4,4 +4,9 @@
     <string name="Phone">0365790188</string>
     <string name="username">Tên đăng nhập</string>
     <string name="password">Mật khẩu</string>
+    <string name="order">Đặt món</string>
+    <string name="payment">Thanh toán</string>
+    <string name="statistics">Thống kê</string>
+    <string name="timekeeping">Chấm công</string>
+    <string name="menu_adjustment">Sửa món</string>
 </resources>

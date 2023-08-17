@@ -5,13 +5,126 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
+    android:background="@color/back_ground"
     tools:context=".MainActivity">
-    <TextView
-        android:id="@+id/tv_username"
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="123123"
-        android:textSize="25sp"/>
+        android:layout_height="match_parent"
+        android:layout_margin="30dp"
+        android:orientation="vertical"
+        android:weightSum="1"
+        android:background="@drawable/background_layout_custom">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="0.9">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="0.5"
+                android:gravity="center_vertical"
+                tools:ignore="NestedWeights">
+                <ImageView
+                    android:id="@+id/iv_avatar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:src="@drawable/head"/>
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name"
+                    android:textSize="13sp"
+                    android:layout_marginStart="20dp"
+                    android:textColor="@color/dark_blue"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical|end"
+                android:layout_weight="0.5">
+                <ImageButton
+                    android:id="@+id/ibtn_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/description"
+                    android:background="@color/white_b"/>
+            </LinearLayout>
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="0.1">
+            <Button
+                android:id="@+id/btn_order"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:text="@string/order"
+                android:textSize="20sp"
+                android:background="@drawable/btn_login_custom"/>
+            <Button
+                android:id="@+id/btn_payment"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_below="@id/btn_order"
+                android:layout_alignStart="@id/btn_order"
+                android:layout_alignEnd="@id/btn_order"
+                android:text="@string/payment"
+                android:textSize="20sp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/btn_login_custom"/>
+            <Button
+                android:id="@+id/btn_statistics"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_below="@id/btn_payment"
+                android:layout_alignStart="@id/btn_payment"
+                android:layout_alignEnd="@id/btn_payment"
+                android:text="@string/statistics"
+                android:textSize="20sp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/btn_login_custom"/>
+            <Button
+                android:id="@+id/btn_timekeeping"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_below="@id/btn_statistics"
+                android:layout_alignStart="@id/btn_statistics"
+                android:layout_alignEnd="@id/btn_statistics"
+                android:text="@string/timekeeping"
+                android:textSize="20sp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/btn_login_custom"/>
+            <Button
+                android:id="@+id/btn_menu_adjust"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_below="@id/btn_timekeeping"
+                android:layout_alignStart="@id/btn_timekeeping"
+                android:layout_alignEnd="@id/btn_timekeeping"
+                android:text="@string/menu_adjustment"
+                android:textSize="20sp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/btn_login_custom"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
 
 </LinearLayout>
