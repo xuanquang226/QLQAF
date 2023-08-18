@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,8 +16,6 @@ import android.widget.Toast;
 import com.example.qlqa.api.LoginAPI;
 import com.example.qlqa.config.RetrofitClient;
 import com.example.qlqa.model.Account;
-
-import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,8 +34,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
 
 
         // Set title for activity
@@ -100,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("username",response.body().getUsername());
                 bundle.putString("password", response.body().getPassword());
+                bundle.putBoolean("typeA", response.body().getTypeAccount());
                 intent.putExtra("info", bundle);
                 startActivity(intent);
             }

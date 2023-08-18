@@ -4,12 +4,12 @@ public class Account {
 
     private int idAccount;
 
-
     private String username;
 
     private String password;
 
-    private Boolean typeAccount;
+    private boolean typeA;
+
 
     public Account(){}
 
@@ -18,11 +18,11 @@ public class Account {
         this.password = password;
     }
 
-    public Account(int idAccount, String username, String password, Boolean typeAccount) {
+    public Account(int idAccount, String username, String password, boolean typeA) {
         this.idAccount = idAccount;
         this.username = username;
         this.password = password;
-        this.typeAccount = typeAccount;
+        this.typeA = typeA;
     }
 
     public int getIdAccount() {
@@ -49,11 +49,11 @@ public class Account {
         this.password = password;
     }
 
-    public Boolean getTypeAccount() {
-        return typeAccount;
+    public boolean getTypeAccount() {
+        return typeA;
     }
 
     public void setTypeAccount(Boolean typeAccount) {
-        this.typeAccount = typeAccount;
+        this.typeA = typeAccount;
     }
 }
