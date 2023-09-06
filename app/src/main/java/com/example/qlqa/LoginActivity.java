@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.qlqa.api.LoginAPI;
-import com.example.qlqa.config.RetrofitClient;
+import com.example.qlqa.utils.RetrofitClient;
 import com.example.qlqa.model.Account;
 
 import retrofit2.Call;
@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         actionBar.setLogo(R.drawable.star);
         actionBar.setDisplayUseLogoEnabled(true);
 
-        // Add button back
+        // Button back
         actionBar.setDisplayHomeAsUpEnabled(true);
 
 
@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Account> call, Throwable t) {
                 Log.d("loi", t.toString());
-                Toast.makeText(LoginActivity.this, "Tai khoan khong dung ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Khong ket noi duoc", Toast.LENGTH_SHORT).show();
             }
         });
     }

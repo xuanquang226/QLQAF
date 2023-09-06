@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/itemLogout"
+        android:title="Đăng xuất"
+        android:actionLayout="@layout/item_menu_layout"
+        app:showAsAction="withText"
+        android:orderInCategory="2"
+        />
+
+    <item
+        android:id="@+id/itemExit"
+        android:title="Thoát"
+        android:icon="@drawable/star"
+        app:showAsAction="withText"
+        android:orderInCategory="1"
+        />
+</menu>
