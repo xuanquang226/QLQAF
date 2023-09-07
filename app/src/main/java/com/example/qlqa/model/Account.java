@@ -10,7 +10,6 @@ public class Account {
 
     private boolean typeA;
 
-
     public Account(){}
 
     public Account(String username, String password){

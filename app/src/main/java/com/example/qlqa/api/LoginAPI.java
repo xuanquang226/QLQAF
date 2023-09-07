@@ -10,5 +10,4 @@ public interface LoginAPI {
 
     @POST("api/login")
     Call<Account> login(@Body Account a);
-
 }
