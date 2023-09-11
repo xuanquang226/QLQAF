@@ -6,9 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 
 import com.example.qlqa.adapter.TableAdapter;
@@ -27,6 +30,7 @@ import retrofit2.Retrofit;
 
 public class OrderAcitivity extends AppCompatActivity {
     private TableAdapter tableAdapter;
+    List<DinnerTable> llTable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,13 +51,12 @@ public class OrderAcitivity extends AppCompatActivity {
                 onBackPressed();
                 return true;
             default:
-                break;
+                return false;
         }
-        return super.onOptionsItemSelected(item);
     }
 
 //    public List<DinnerTable> createTempData(){
-//        List<DinnerTable> llTable = new ArrayList<DinnerTable>();
+//        llTable = new ArrayList<DinnerTable>();
 //        llTable.add(new DinnerTable(1, true));
 //        llTable.add(new DinnerTable(2, true));
 //        llTable.add(new DinnerTable(3, false));
@@ -68,14 +71,22 @@ public class OrderAcitivity extends AppCompatActivity {
         call.enqueue(new Callback<List<DinnerTable>>() {
             @Override
             public void onResponse(Call<List<DinnerTable>> call, Response<List<DinnerTable>> response) {
-                tableAdapter = new TableAdapter(OrderAcitivity.this);
+                tableAdapter = new TableAdapter(new TableAdapter.ItemClickListener() {
+                    @Override
+                    public void onItemClick(DinnerTable dinnerTable) {
+                        Intent intent = new Intent(getApplicationContext(), OrderTwoActivity.class);
+                        intent.putExtra("infoTable", dinnerTable);
+                        startActivity(intent);
+                        Toast.makeText(OrderAcitivity.this, "Bàn " + dinnerTable.getoNumber(), Toast.LENGTH_SHORT).show();
+                    }
+                });
                 tableAdapter.setData(response.body());
 
-                LinearLayoutManager layoutManager = new LinearLayoutManager(OrderAcitivity.this, RecyclerView.VERTICAL, false);
-                RecyclerView rcv_table = findViewById(R.id.rcv_ltb);
+                RecyclerView recyclerView = findViewById(R.id.rcv_ltb);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(OrderAcitivity.this, LinearLayoutManager.VERTICAL, false);
 
-                rcv_table.setAdapter(tableAdapter);
-                rcv_table.setLayoutManager(layoutManager);
+                recyclerView.setLayoutManager(layoutManager);
+                recyclerView.setAdapter(tableAdapter);
             }
 
             @Override

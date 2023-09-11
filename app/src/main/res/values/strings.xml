@@ -10,4 +10,9 @@
     <string name="timekeeping">Chấm công</string>
     <string name="menu_adjustment">Sửa món</string>
     <string name="list_table">Danh sách bàn</string>
+    <string name="search">Tìm món</string>
+    <string name="list_dish">Danh sách món</string>
+    <string name="quantity">Số lượng</string>
+    <string name="into_money">Thành tiền</string>
+    <string name="note">Ghi chú</string>
 </resources>

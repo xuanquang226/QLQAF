@@ -1,6 +1,11 @@
 package com.example.qlqa.model;
 
-public class DinnerTable {
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+import java.lang.annotation.Annotation;
+
+public class DinnerTable implements Serializable {
     private int oNumber;
     private boolean stt;
 
@@ -27,4 +32,6 @@ public class DinnerTable {
     public void setStt(boolean stt) {
         this.stt = stt;
     }
+
+
 }
