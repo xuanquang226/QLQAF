@@ -9,6 +9,6 @@ import retrofit2.http.GET;
 
 public interface InfoTableAPI {
 
-    @GET("api/table")
+    @GET("/api/table")
     Call<List<DinnerTable>> getInfoTable();
 }

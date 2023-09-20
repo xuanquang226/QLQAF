@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/back_ground"
+    android:orientation="vertical"
     tools:context=".OrderAcitivity">
 
 
@@ -13,7 +13,6 @@
         android:id="@+id/rcv_ltb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="40dp"
-       />
+        android:layout_margin="40dp" />
 
 </LinearLayout>

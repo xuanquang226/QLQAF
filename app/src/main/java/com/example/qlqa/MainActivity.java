@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Logout
         ImageButton imgBtn = (ImageButton) findViewById(R.id.ibtn_info);
-        PopupMenu dropDownMenu = new PopupMenu(getApplicationContext(), imgBtn);
+        PopupMenu dropDownMenu = new PopupMenu(this, imgBtn);
         Menu menu = dropDownMenu.getMenu();
         dropDownMenu.getMenuInflater().inflate(R.menu.menu_img_button, menu);
         dropDownMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

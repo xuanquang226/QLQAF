@@ -22,7 +22,7 @@
             android:exported="false" />
         <activity
             android:name=".TimeKeepingActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".StatictisActivity"
             android:exported="false" />
