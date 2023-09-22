@@ -241,20 +241,30 @@ public class OrderTwoActivity extends AppCompatActivity {
             int position = i;
             List<Dish> dishList = response.body();
             double price = dishList.get(position).getPrice();
+            int quantity = dishList.get(position).getQuantity();
+
             rowListAtt.get(position).getImgBtnIncrease().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int tvQuantity = Integer.parseInt(rowListAtt.get(position).getTvQuantity().getText().toString());
-                    rowListAtt.get(position).getTvQuantity().setText(String.valueOf(tvQuantity + 1));
-                    int tvQuantityChange = Integer.parseInt(rowListAtt.get(position).getTvQuantity().getText().toString());
-                    if (tvQuantityChange > 0) {
-                        rowListAtt.get(position).getTvPrice().setText(String.valueOf(price * tvQuantityChange));
+                    if(quantity != 0 && tvQuantity < quantity){
+                        // Quantity to price
+                        rowListAtt.get(position).getTvQuantity().setText(String.valueOf(tvQuantity + 1));
+                        int tvQuantityChange = Integer.parseInt(rowListAtt.get(position).getTvQuantity().getText().toString());
+                        if (tvQuantityChange > 0) {
+                            rowListAtt.get(position).getTvPrice().setText(String.valueOf(price * tvQuantityChange));
+                        }
+
+                        // Set total price
+                        totalPrice = 0;
+                        for(int j = 0; j < rowListAtt.size(); j++){
+                            totalPrice += Double.parseDouble(rowListAtt.get(j).getTvPrice().getText().toString());
+                        }
+                        tv_total_amount.setText(String.valueOf(totalPrice));
+                    }else{
+                        Toast.makeText(OrderTwoActivity.this, "Hết món " + rowListAtt.get(position).getTvNameDish().getText(), Toast.LENGTH_SHORT).show();
                     }
-                    totalPrice = 0;
-                    for(int j = 0; j < rowListAtt.size(); j++){
-                        totalPrice += Double.parseDouble(rowListAtt.get(j).getTvPrice().getText().toString());
-                    }
-                    tv_total_amount.setText(String.valueOf(totalPrice));
+
                 }
             });
 
@@ -314,15 +324,5 @@ public class OrderTwoActivity extends AppCompatActivity {
             }
         }
        */
-
-        Toast.makeText(this, totalPrice + "", Toast.LENGTH_SHORT).show();
     }
-
-    public void totalPrice(List<Row> rowList){
-        for(Row row:rowList){
-            totalPrice += Double.parseDouble(row.getTvPrice().getText().toString());
-        }
-        tv_total_amount.setText(String.valueOf(totalPrice));
-    }
-
 }
