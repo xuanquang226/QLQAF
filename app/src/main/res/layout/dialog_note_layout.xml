@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="10dp"
+    android:background="@drawable/bg_white_corner_15"
+    >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/note"
+        android:textAlignment="center"
+        android:background="@drawable/bg_blue_corner_15_top_right_top_left"/>
+    <EditText
+        android:id="@+id/edt_dialog_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Viết ghi chú"
+        android:textColorHint="@color/black"
+        android:background="@drawable/bg_gray_stroke"
+        android:textColor="@color/black"
+        android:lines="2"/>
+        <Button
+            android:id="@+id/btn_dialog_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Xác nhận"
+            android:textAllCaps="false"/>
+</LinearLayout>

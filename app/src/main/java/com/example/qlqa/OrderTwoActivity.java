@@ -5,11 +5,18 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -21,7 +28,6 @@ import android.widget.Toast;
 import com.example.qlqa.api.GetDish;
 import com.example.qlqa.model.DinnerTable;
 import com.example.qlqa.model.Dish;
-import com.example.qlqa.model.LinearLayoutQuantity;
 import com.example.qlqa.model.Row;
 import com.example.qlqa.utils.RetrofitClient;
 
@@ -46,6 +52,10 @@ public class OrderTwoActivity extends AppCompatActivity {
 
     private int basePrice = 0;
     private double totalPrice;
+    private EditText edt_dialog_note;
+    private Button btn_dialog_confirm;
+
+    private String note;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,17 +190,16 @@ public class OrderTwoActivity extends AppCompatActivity {
 
                     // Column 3
                     tv7 = new TextView(getApplicationContext());
-                    tv7.setText("0");
+                    tv7.setText("0.0");
                     tv7.setGravity(Gravity.CENTER);
-                    ntableRow.addView(tv7, new TableRow.LayoutParams(1, 150));
+                    ntableRow.addView(tv7, new TableRow.LayoutParams(1, TableRow.LayoutParams.WRAP_CONTENT));
 
 
                     // Column 4
                     tv8 = new TextView(getApplicationContext());
-                    tv8.setText("Ghi chú");
+                    tv8.setText("Nhấn");
                     tv8.setGravity(Gravity.CENTER);
-                    ntableRow.addView(tv8, new TableRow.LayoutParams(1, 150));
-
+                    ntableRow.addView(tv8, new TableRow.LayoutParams(1, TableRow.LayoutParams.WRAP_CONTENT));
                     tableLayout.addView(ntableRow);
                 }
                 handleImgButton(0, response);
@@ -222,14 +231,14 @@ public class OrderTwoActivity extends AppCompatActivity {
             tableRowList.add((TableRow) tableLayout.getChildAt(i));
         }
 
-        // Get attribute of row
+        // Get view of row
         List<Row> rowListAtt = new ArrayList<>();
         for (int i = 0; i < tableRowList.size(); i++) {
             rowListAtt.add(new Row((TextView) tableRowList.get(i).getChildAt(0), (LinearLayout) tableRowList.get(i).getChildAt(1)
                     , (TextView) tableRowList.get(i).getChildAt(2), (TextView) tableRowList.get(i).getChildAt(3)));
         }
 
-        // Get view of linearlayout
+        // Get view of linearlayout quantity
         for (int i = 0; i < rowListAtt.size(); i++) {
             rowListAtt.get(i).setImgBtnDecrease((ImageButton) rowListAtt.get(i).getLinearLayoutQuantity().getChildAt(0));
             rowListAtt.get(i).setTvQuantity((TextView) rowListAtt.get(i).getLinearLayoutQuantity().getChildAt(1));
@@ -237,6 +246,8 @@ public class OrderTwoActivity extends AppCompatActivity {
 
         }
 
+
+        // Event click
         for (int i = 0; i < rowListAtt.size(); i++) {
             int position = i;
             List<Dish> dishList = response.body();
@@ -247,7 +258,7 @@ public class OrderTwoActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     int tvQuantity = Integer.parseInt(rowListAtt.get(position).getTvQuantity().getText().toString());
-                    if(quantity != 0 && tvQuantity < quantity){
+                    if (quantity != 0 && tvQuantity < quantity) {
                         // Quantity to price
                         rowListAtt.get(position).getTvQuantity().setText(String.valueOf(tvQuantity + 1));
                         int tvQuantityChange = Integer.parseInt(rowListAtt.get(position).getTvQuantity().getText().toString());
@@ -257,11 +268,11 @@ public class OrderTwoActivity extends AppCompatActivity {
 
                         // Set total price
                         totalPrice = 0;
-                        for(int j = 0; j < rowListAtt.size(); j++){
+                        for (int j = 0; j < rowListAtt.size(); j++) {
                             totalPrice += Double.parseDouble(rowListAtt.get(j).getTvPrice().getText().toString());
                         }
-                        tv_total_amount.setText(String.valueOf(totalPrice));
-                    }else{
+                        tv_total_amount.setText(String.valueOf(totalPrice) + " Đ");
+                    } else {
                         Toast.makeText(OrderTwoActivity.this, "Hết món " + rowListAtt.get(position).getTvNameDish().getText(), Toast.LENGTH_SHORT).show();
                     }
 
@@ -276,53 +287,48 @@ public class OrderTwoActivity extends AppCompatActivity {
                         rowListAtt.get(position).getTvQuantity().setText(String.valueOf(tvQuantity - 1));
                         int tvQuantityChange = Integer.parseInt(rowListAtt.get(position).getTvQuantity().getText().toString());
                         rowListAtt.get(position).getTvPrice().setText(String.valueOf(price * tvQuantityChange));
+                        if(tvQuantityChange == 0){
+                            rowListAtt.get(position).getTvNote().setText("Nhấn");
+                            edt_dialog_note.setText("");
+                        }
+                    }else{
+                        rowListAtt.get(position).getTvNote().setText("Nhấn");
+                        edt_dialog_note.setText("");
                     }
                     totalPrice = 0;
-                    for(int j = 0; j < rowListAtt.size(); j++){
+                    for (int j = 0; j < rowListAtt.size(); j++) {
                         totalPrice += Double.parseDouble(rowListAtt.get(j).getTvPrice().getText().toString());
                     }
-                    tv_total_amount.setText(String.valueOf(totalPrice));
+                    tv_total_amount.setText(String.valueOf(totalPrice) + " Đ");
+                }
+            });
+
+
+            Dialog dialog = new Dialog(this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.dialog_note_layout);
+            rowListAtt.get(position).getTvNote().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Window window = dialog.getWindow();
+                    window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                    WindowManager.LayoutParams windowAtt = window.getAttributes();
+                    windowAtt.gravity = Gravity.CENTER;
+                    window.setAttributes(windowAtt);
+                    btn_dialog_confirm = dialog.findViewById(R.id.btn_dialog_confirm);
+                    edt_dialog_note = dialog.findViewById(R.id.edt_dialog_note);
+                    btn_dialog_confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            rowListAtt.get(position).getTvNote().setText(edt_dialog_note.getText());
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
                 }
             });
         }
-        // Get imagebutton
-        /*
-        Map<Integer, TableRow> tableRowMap = new HashMap<>();
-        for (int i = 1; i < tableLayout.getChildCount(); i++) {
-            tableRowMap.put(i, (TableRow) tableLayout.getChildAt(i));
-        }
-
-        Map<LinearLayout, ImageButton[]> linearLayoutViewMap = new HashMap<>();
-        for (int i = 1; i < tableRowMap.size() + 1; i++) {
-            LinearLayout linearLayout = (LinearLayout) tableRowMap.get(i).getChildAt(1);
-            linearLayoutViewMap.put(linearLayout, new ImageButton[]{(ImageButton) linearLayout.getChildAt(0), (ImageButton) linearLayout.getChildAt(2)});
-        }
-
-        List<ImageButton> imageButtonList = new ArrayList<>();
-        linearLayoutViewMap.values().stream().forEach(a -> {
-            for (ImageButton imgBtn : a) {
-                imageButtonList.add(imgBtn);
-            }
-        });
-
-        for (int i = 0; i < imageButtonList.size(); i++) {
-            if (i % 2 == 0) {
-                imageButtonList.get(i).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(OrderTwoActivity.this, "Hehee", Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-            } else {
-                imageButtonList.get(i).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(OrderTwoActivity.this, "hoho", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        }
-       */
     }
 }
