@@ -1,6 +1,7 @@
 package com.example.qlqa.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qlqa.R;
@@ -19,7 +21,10 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     private List<DinnerTable> lTable;
     private ItemClickListener onItemClickListener;
 
-    public TableAdapter(ItemClickListener onItemClickListener) {
+    private Context context;
+
+    public TableAdapter(Context context, ItemClickListener onItemClickListener) {
+        this.context = context;
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -43,10 +48,10 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
         holder.tv_oNumber.setText(String.valueOf(table.getoNumber()));
         if(table.isStt()){
             holder.tv_stt.setText("Đầy");
-            holder.linearLayout.setBackgroundColor(R.color.grey);
+            holder.cardView.setBackgroundTintList(context.getColorStateList(R.color.moderate_blue));
         }else{
             holder.tv_stt.setText("Trống");
-            holder.linearLayout.setBackgroundColor(R.color.back_ground);
+            holder.cardView.setBackgroundTintList(context.getColorStateList(R.color.gray));
         }
         holder.itemView.setOnClickListener(view -> {
             onItemClickListener.onItemClick(lTable.get(position));
@@ -62,13 +67,13 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     public static class TableViewHolder extends RecyclerView.ViewHolder{
         private final TextView tv_oNumber;
         private final TextView tv_stt;
-        private LinearLayout linearLayout;
+        private CardView cardView;
 
         public TableViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_oNumber = itemView.findViewById(R.id.tv_onumber);
             tv_stt = itemView.findViewById(R.id.tv_status);
-            linearLayout = itemView.findViewById(R.id.lLayout);
+            cardView = itemView.findViewById(R.id.cv_order_layout);
         }
     }
 

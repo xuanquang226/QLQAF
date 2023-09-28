@@ -21,6 +21,7 @@
         android:paddingBottom="5dp">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_search2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:backgroundTint="@color/white"

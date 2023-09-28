@@ -3,6 +3,7 @@ package com.example.qlqa;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,6 +40,7 @@ public class OrderAcitivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(R.string.list_table);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setBackgroundDrawable(getDrawable(R.color.moderate_blue));
 
         getInfoTable();
 
@@ -71,7 +73,7 @@ public class OrderAcitivity extends AppCompatActivity {
         call.enqueue(new Callback<List<DinnerTable>>() {
             @Override
             public void onResponse(Call<List<DinnerTable>> call, Response<List<DinnerTable>> response) {
-                tableAdapter = new TableAdapter(new TableAdapter.ItemClickListener() {
+                tableAdapter = new TableAdapter(getApplicationContext(), new TableAdapter.ItemClickListener() {
                     @Override
                     public void onItemClick(DinnerTable dinnerTable) {
                         Intent intent = new Intent(getApplicationContext(), OrderTwoActivity.class);
@@ -87,6 +89,8 @@ public class OrderAcitivity extends AppCompatActivity {
 
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setAdapter(tableAdapter);
+                RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
+                recyclerView.addItemDecoration(itemDecoration);
             }
 
             @Override

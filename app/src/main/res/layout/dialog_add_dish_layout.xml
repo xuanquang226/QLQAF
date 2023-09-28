@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@color/white">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thêm món"
+        android:layout_gravity="center"
+        android:textColor="@color/black"/>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/black"
+        android:background="@drawable/bg_gray_stroke">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_add_name_dish"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Tên món"
+            android:textColor="@color/black"
+            android:inputType="text"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/black"
+        android:background="@drawable/bg_gray_stroke">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_add_quantity_dish"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Số suất"
+            android:textColor="@color/black"
+            android:inputType="number"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/black"
+        android:background="@drawable/bg_gray_stroke">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_add_price_dish"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Giá tiền"
+            android:textColor="@color/black"
+            android:inputType="number"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_confirm_dialog_add_dish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/confirm"
+        android:textAllCaps="false"
+        android:background="@drawable/btn_login_custom"/>
+
+
+</LinearLayout>

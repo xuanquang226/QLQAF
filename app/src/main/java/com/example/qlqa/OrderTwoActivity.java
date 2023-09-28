@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -25,9 +26,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.qlqa.api.GetDish;
+import com.example.qlqa.api.DishAPI;
 import com.example.qlqa.model.DinnerTable;
-import com.example.qlqa.model.Dish;
 import com.example.qlqa.model.Row;
 import com.example.qlqa.utils.RetrofitClient;
 
@@ -42,7 +42,6 @@ import retrofit2.Retrofit;
 public class OrderTwoActivity extends AppCompatActivity {
     ArrayList<String> nameDish;
     private Retrofit retrofit;
-    private ListView lv;
     private TextView tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv_total_amount;
 
     private ImageButton imgButton, imgButton2;
@@ -52,10 +51,13 @@ public class OrderTwoActivity extends AppCompatActivity {
 
     private int basePrice = 0;
     private double totalPrice;
-    private EditText edt_dialog_note;
-    private Button btn_dialog_confirm;
+    private EditText edt_dialog_note,edt_search;
+    private Button btn_dialog_confirm, btn_confirm;
 
-    private String note;
+    private androidx.appcompat.widget.SearchView searchView;
+
+    private ArrayAdapter<String> arrayAdapter;
+    private Dialog dialoga;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,29 +69,54 @@ public class OrderTwoActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Bàn " + dinnerTable.getoNumber());
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setBackgroundDrawable(getDrawable(R.color.moderate_blue));
 
 
 //        lv = findViewById(R.id.lv_list_dish);
 //        listView();
-
+        edt_search = (EditText) findViewById(R.id.edt_search2);
         createMenuTable();
-
         tv_total_amount = (TextView) findViewById(R.id.tv_total_amount);
+        btn_confirm = (Button) findViewById(R.id.btn_confirm);
+
+        dialoga = new Dialog(this);
+        dialoga.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialoga.setContentView(R.layout.dialog_list_name_dish_layout);
+
     }
 
     public void createMenuTable() {
         retrofit = RetrofitClient.getClient();
-        GetDish getDish = retrofit.create(GetDish.class);
-        Call<List<Dish>> call = getDish.getListDish();
-        call.enqueue(new Callback<List<Dish>>() {
+        DishAPI getDish = retrofit.create(DishAPI.class);
+        Call<List<com.example.qlqa.model.Dish>> call = getDish.getListDish();
+        call.enqueue(new Callback<List<com.example.qlqa.model.Dish>>() {
             @SuppressLint("ResourceAsColor")
             @Override
-            public void onResponse(Call<List<Dish>> call, Response<List<Dish>> response) {
+            public void onResponse(Call<List<com.example.qlqa.model.Dish>> call, Response<List<com.example.qlqa.model.Dish>> response) {
                 nameDish = new ArrayList<>();
-                for (Dish dish : response.body()) {
+                for (com.example.qlqa.model.Dish dish : response.body()) {
                     nameDish.add(dish.getName());
                 }
-//                lv.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, nameDish));
+
+
+                Window window = dialoga.getWindow();
+                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+
+                WindowManager.LayoutParams windowAtt = window.getAttributes();
+                windowAtt.gravity = Gravity.CENTER;
+                window.setAttributes(windowAtt);
+
+                ListView listViewName = (ListView) dialoga.findViewById(R.id.lv_name_dish);
+                arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, nameDish);
+                listViewName.setAdapter(arrayAdapter);
+
+                edt_search.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialoga.show();
+                    }
+                });
 
 
                 // Create table layout
@@ -206,24 +233,13 @@ public class OrderTwoActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Dish>> call, Throwable t) {
+            public void onFailure(Call<List<com.example.qlqa.model.Dish>> call, Throwable t) {
 
             }
         });
     }
 
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-        }
-        return false;
-    }
-
-    public void handleImgButton(int initQuantity, Response<List<Dish>> response) {
+    public void handleImgButton(int initQuantity, Response<List<com.example.qlqa.model.Dish>> response) {
 
         // Get table row
         List<TableRow> tableRowList = new ArrayList<>();
@@ -250,9 +266,13 @@ public class OrderTwoActivity extends AppCompatActivity {
         // Event click
         for (int i = 0; i < rowListAtt.size(); i++) {
             int position = i;
-            List<Dish> dishList = response.body();
+            List<com.example.qlqa.model.Dish> dishList = response.body();
             double price = dishList.get(position).getPrice();
             int quantity = dishList.get(position).getQuantity();
+
+            Dialog dialog = new Dialog(this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.dialog_note_layout);
 
             rowListAtt.get(position).getImgBtnIncrease().setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -271,7 +291,7 @@ public class OrderTwoActivity extends AppCompatActivity {
                         for (int j = 0; j < rowListAtt.size(); j++) {
                             totalPrice += Double.parseDouble(rowListAtt.get(j).getTvPrice().getText().toString());
                         }
-                        tv_total_amount.setText(String.valueOf(totalPrice) + " Đ");
+                        tv_total_amount.setText(totalPrice + " Đ");
                     } else {
                         Toast.makeText(OrderTwoActivity.this, "Hết món " + rowListAtt.get(position).getTvNameDish().getText(), Toast.LENGTH_SHORT).show();
                     }
@@ -287,29 +307,31 @@ public class OrderTwoActivity extends AppCompatActivity {
                         rowListAtt.get(position).getTvQuantity().setText(String.valueOf(tvQuantity - 1));
                         int tvQuantityChange = Integer.parseInt(rowListAtt.get(position).getTvQuantity().getText().toString());
                         rowListAtt.get(position).getTvPrice().setText(String.valueOf(price * tvQuantityChange));
-                        if(tvQuantityChange == 0){
+                        if (tvQuantityChange == 0) {
                             rowListAtt.get(position).getTvNote().setText("Nhấn");
+                            if (edt_dialog_note != null) {
+                                edt_dialog_note.setText("");
+                            }
+                        }
+                    } else {
+                        rowListAtt.get(position).getTvNote().setText("Nhấn");
+                        if (edt_dialog_note != null) {
                             edt_dialog_note.setText("");
                         }
-                    }else{
-                        rowListAtt.get(position).getTvNote().setText("Nhấn");
-                        edt_dialog_note.setText("");
                     }
                     totalPrice = 0;
                     for (int j = 0; j < rowListAtt.size(); j++) {
                         totalPrice += Double.parseDouble(rowListAtt.get(j).getTvPrice().getText().toString());
                     }
-                    tv_total_amount.setText(String.valueOf(totalPrice) + " Đ");
+                    tv_total_amount.setText(totalPrice + " Đ");
                 }
             });
 
-
-            Dialog dialog = new Dialog(this);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.dialog_note_layout);
             rowListAtt.get(position).getTvNote().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    int tvQuantity = Integer.parseInt(rowListAtt.get(position).getTvQuantity().getText().toString());
+
                     Window window = dialog.getWindow();
                     window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
                     window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -323,12 +345,28 @@ public class OrderTwoActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
                             rowListAtt.get(position).getTvNote().setText(edt_dialog_note.getText());
+                            if (edt_dialog_note.getText().toString().equals("")) {
+                                rowListAtt.get(position).getTvNote().setText("Nhấn");
+                            }
                             dialog.dismiss();
                         }
                     });
-                    dialog.show();
+                    if (tvQuantity > 0) {
+                        dialog.show();
+                    }
                 }
             });
         }
     }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return false;
+    }
+
 }

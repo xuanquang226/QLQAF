@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="5dp"
+    android:backgroundTint="@color/white_smoke"
+    android:layout_marginBottom="15dp"
+    android:layout_marginStart="5dp"
+    android:layout_marginEnd="5dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:orientation="horizontal">
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               >
+               <TextView
+                   android:id="@+id/tv_dish_item"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentStart="true"
+                   android:layout_alignParentTop="true"
+                   android:layout_alignParentBottom="true"
+                   android:gravity="center_vertical"
+                   android:text="Tên món"
+                   android:textColor="@color/black"/>
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_toEndOf="@id/tv_dish_item"
+                   android:layout_alignParentEnd="true"
+                   android:layout_alignParentBottom="true"
+                   android:layout_alignParentTop="true"
+                   android:gravity="end|center_vertical"
+                   android:orientation="horizontal"
+                   >
+                   <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="Giá: "
+                       android:textColor="@color/black"/>
+                   <TextView
+                       android:id="@+id/tv_price_dish"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="10000"
+                       android:textColor="@color/black"/>
+                   <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text=" Đ"
+                       android:textColor="@color/black"/>
+               </LinearLayout>
+           </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.7"
+            android:orientation="horizontal"
+            android:gravity="center"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Số suất: "
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/tv_quantity_dish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
