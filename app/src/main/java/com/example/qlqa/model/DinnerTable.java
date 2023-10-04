@@ -4,11 +4,13 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.util.Set;
 
 public class DinnerTable implements Serializable {
     private int oNumber;
     private boolean stt;
 
+    private Set<Order> order;
     public DinnerTable() {
     }
 
@@ -33,5 +35,7 @@ public class DinnerTable implements Serializable {
         this.stt = stt;
     }
 
-
+    public Set<Order> getOrder() {
+        return order;
+    }
 }
