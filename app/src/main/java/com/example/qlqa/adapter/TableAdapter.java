@@ -46,7 +46,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     public void onBindViewHolder(@NonNull TableViewHolder holder, int position) {
         DinnerTable table = lTable.get(position);
         holder.tv_oNumber.setText(String.valueOf(table.getoNumber()));
-        if(table.isStt()){
+        if(table.getOrder() != null){
             holder.tv_stt.setText("Đầy");
             holder.cardView.setBackgroundTintList(context.getColorStateList(R.color.moderate_blue));
         }else{

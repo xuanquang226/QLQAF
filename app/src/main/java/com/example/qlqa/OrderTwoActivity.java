@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -64,10 +65,12 @@ public class OrderTwoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.order_two_layout);
 
-        DinnerTable dinnerTable = (DinnerTable) getIntent().getSerializableExtra("infoTable");
+        Intent intent = getIntent();
+        Bundle bundleTable = intent.getBundleExtra("intentTable");
 
+        Toast.makeText(this, bundleTable.getString("nameStaff"), Toast.LENGTH_SHORT).show();
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Bàn " + dinnerTable.getoNumber());
+        actionBar.setTitle("Bàn " + bundleTable.getLong("idTable"));
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setBackgroundDrawable(getDrawable(R.color.moderate_blue));
 

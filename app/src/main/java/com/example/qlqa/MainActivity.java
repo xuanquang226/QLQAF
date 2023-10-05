@@ -17,12 +17,22 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.qlqa.api.StaffAPI;
+import com.example.qlqa.model.Staff;
+import com.example.qlqa.utils.RetrofitClient;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button btn_order, btn_payment, btn_statistics, btn_timekeeping, btn_menuAdjustment;
     private boolean typeAccount;
     private Intent intent;
     private Bundle bundle;
+    private TextView tv_user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,9 +42,10 @@ public class MainActivity extends AppCompatActivity {
         bundle = intent.getBundleExtra("info");
 
 
-        TextView tv_user = (TextView) findViewById(R.id.tv_name);
-        tv_user.setText(bundle.getString("username"));
+        tv_user = (TextView) findViewById(R.id.tv_name);
         typeAccount = bundle.getBoolean("typeA");
+
+        getStaff(bundle.getLong("idS"));
 
 
         btn_order = (Button) findViewById(R.id.btn_order);
@@ -81,6 +92,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dropDownMenu.show();
+            }
+        });
+    }
+
+    public void getStaff(long idAccount){
+        Retrofit retrofit = RetrofitClient.getClient();
+        StaffAPI staffAPI = retrofit.create(StaffAPI.class);
+        Call<Staff> call = staffAPI.getStaff(idAccount);
+        call.enqueue(new Callback<Staff>() {
+            @Override
+            public void onResponse(Call<Staff> call, Response<Staff> response) {
+                Staff staff = response.body();
+                tv_user.setText(staff.getNameStaff());
+            }
+
+            @Override
+            public void onFailure(Call<Staff> call, Throwable t) {
+
             }
         });
     }

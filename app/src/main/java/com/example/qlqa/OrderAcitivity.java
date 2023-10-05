@@ -77,7 +77,10 @@ public class OrderAcitivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(DinnerTable dinnerTable) {
                         Intent intent = new Intent(getApplicationContext(), OrderTwoActivity.class);
-                        intent.putExtra("infoTable", dinnerTable);
+                        Bundle bundle = new Bundle();
+                        bundle.putLong("idTable", dinnerTable.getoNumber());
+                        bundle.putString("nameStaff", dinnerTable.getOrder().getStaff().getNameStaff());
+                        intent.putExtra("intentTable",bundle);
                         startActivity(intent);
                         //Toast.makeText(OrderAcitivity.this, "Bàn " + dinnerTable.getoNumber(), Toast.LENGTH_SHORT).show();
                     }
@@ -91,6 +94,7 @@ public class OrderAcitivity extends AppCompatActivity {
                 recyclerView.setAdapter(tableAdapter);
                 RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
                 recyclerView.addItemDecoration(itemDecoration);
+
             }
 
             @Override

@@ -5,33 +5,32 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 
-public class DinnerTable implements Serializable {
-    private int oNumber;
-    private boolean stt;
+public class DinnerTable {
+    private long oNumber;
+
+    private Order order;
 
     public DinnerTable() {
     }
 
-    public DinnerTable(int oNumber, boolean stt) {
+    public DinnerTable(long oNumber, Order order) {
         this.oNumber = oNumber;
-        this.stt = stt;
+        this.order = order;
     }
 
-    public int getoNumber() {
+    public long getoNumber() {
         return oNumber;
     }
 
-    public void setoNumber(int oNumber) {
+    public void setoNumber(long oNumber) {
         this.oNumber = oNumber;
     }
 
-    public boolean isStt() {
-        return stt;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setStt(boolean stt) {
-        this.stt = stt;
+    public void setOrder(Order order) {
+        this.order = order;
     }
-
-
 }
