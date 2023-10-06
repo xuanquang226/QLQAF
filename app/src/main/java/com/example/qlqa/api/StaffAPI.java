@@ -8,6 +8,6 @@ import retrofit2.http.Path;
 
 public interface StaffAPI {
 
-    @GET("api/staff/{id}")
+    @GET("/api/staff/{id}")
     Call<Staff> getStaff(@Path("id") long idAccount);
 }

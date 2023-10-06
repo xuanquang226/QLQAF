@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_layout);
 
         intent = getIntent();
-        bundle = intent.getBundleExtra("info");
+        bundle = intent.getExtras();
 
 
         tv_user = (TextView) findViewById(R.id.tv_name);
@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<Staff> call, Response<Staff> response) {
                 Staff staff = response.body();
                 tv_user.setText(staff.getNameStaff());
+                bundle.putLong("idStaff", staff.getIdStaff());
             }
 
             @Override
@@ -118,7 +119,9 @@ public class MainActivity extends AppCompatActivity {
         btn_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, OrderAcitivity.class));
+                Intent intent1 = new Intent(MainActivity.this, OrderAcitivity.class);
+                intent1.putExtras(bundle);
+                startActivity(intent1);
             }
         });
     }

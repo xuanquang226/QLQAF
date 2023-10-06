@@ -97,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                 bundle.putString("password", response.body().getPassword());
                 bundle.putBoolean("typeA", response.body().getTypeAccount());
                 bundle.putLong("idS", response.body().getIdS());
-                intent.putExtra("info", bundle);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
 

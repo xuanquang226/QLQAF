@@ -28,12 +28,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.qlqa.api.DishAPI;
+import com.example.qlqa.api.InfoTableAPI;
+import com.example.qlqa.api.OrderAPI;
+import com.example.qlqa.api.StaffAPI;
 import com.example.qlqa.model.DinnerTable;
+import com.example.qlqa.model.Dish;
+import com.example.qlqa.model.Order;
 import com.example.qlqa.model.Row;
 import com.example.qlqa.utils.RetrofitClient;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,9 +58,9 @@ public class OrderTwoActivity extends AppCompatActivity {
     private TableRow ntableRow, tableRow1;
     private TableLayout tableLayout;
 
-    private int basePrice = 0;
+    private String note = "";
     private double totalPrice;
-    private EditText edt_dialog_note,edt_search;
+    private EditText edt_dialog_note, edt_search;
     private Button btn_dialog_confirm, btn_confirm;
 
     private androidx.appcompat.widget.SearchView searchView;
@@ -60,17 +68,19 @@ public class OrderTwoActivity extends AppCompatActivity {
     private ArrayAdapter<String> arrayAdapter;
     private Dialog dialoga;
 
+    private Intent intent;
+    private Bundle bundle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.order_two_layout);
 
-        Intent intent = getIntent();
-        Bundle bundleTable = intent.getBundleExtra("intentTable");
+        intent = getIntent();
+        bundle = intent.getExtras();
 
-        Toast.makeText(this, bundleTable.getString("nameStaff"), Toast.LENGTH_SHORT).show();
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Bàn " + bundleTable.getLong("idTable"));
+        actionBar.setTitle("Bàn " + bundle.getLong("idTable"));
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setBackgroundDrawable(getDrawable(R.color.moderate_blue));
 
@@ -79,8 +89,11 @@ public class OrderTwoActivity extends AppCompatActivity {
 //        listView();
         edt_search = (EditText) findViewById(R.id.edt_search2);
         createMenuTable();
+
         tv_total_amount = (TextView) findViewById(R.id.tv_total_amount);
+
         btn_confirm = (Button) findViewById(R.id.btn_confirm);
+
 
         dialoga = new Dialog(this);
         dialoga.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -232,7 +245,7 @@ public class OrderTwoActivity extends AppCompatActivity {
                     ntableRow.addView(tv8, new TableRow.LayoutParams(1, TableRow.LayoutParams.WRAP_CONTENT));
                     tableLayout.addView(ntableRow);
                 }
-                handleImgButton(0, response);
+                handle(0, response);
             }
 
             @Override
@@ -242,7 +255,7 @@ public class OrderTwoActivity extends AppCompatActivity {
         });
     }
 
-    public void handleImgButton(int initQuantity, Response<List<com.example.qlqa.model.Dish>> response) {
+    public void handle(int initQuantity, Response<List<com.example.qlqa.model.Dish>> response) {
 
         // Get table row
         List<TableRow> tableRowList = new ArrayList<>();
@@ -360,6 +373,53 @@ public class OrderTwoActivity extends AppCompatActivity {
                 }
             });
         }
+
+        btn_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Set<Dish> dishSet = new HashSet<>();
+
+                for (int i = 0; i < rowListAtt.size(); i++) {
+                    if (Integer.parseInt(rowListAtt.get(i).getTvQuantity().getText().toString()) > 0) {
+                        Dish dish = new Dish();
+                        dish.setName(rowListAtt.get(i).getTvNameDish().getText().toString());
+                        dish.setPrice(Double.parseDouble(rowListAtt.get(i).getTvPrice().getText().toString()));
+                        dish.setQuantity(Integer.parseInt(rowListAtt.get(i).getTvQuantity().getText().toString()));
+//                        for(Dish dish2: response.body()){
+//                            if(dish2.getName().equalsIgnoreCase(rowListAtt.get(i).getTvNameDish().getText().toString())){
+//                               dish.setId(dish2.getId());
+//                                Toast.makeText(OrderTwoActivity.this, dish2.getId() + "", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+                        dishSet.add(dish);
+                        if(rowListAtt.get(i).getTvNote().getText().toString() != null && !rowListAtt.get(i).getTvNote().getText().toString().equals("Nhấn")) {
+                            note += (rowListAtt.get(i).getTvNote().getText().toString() + "--");
+                        }
+                    }
+                }
+//                Toast.makeText(OrderTwoActivity.this, "Số bàn " + bundle.getLong("idTable"), Toast.LENGTH_SHORT).show();
+                Order order = new Order();
+                order.setListMonAn(dishSet);
+                order.setNote(note);
+
+                Retrofit retrofit1 = RetrofitClient.getClient();
+                OrderAPI orderAPI = retrofit1.create(OrderAPI.class);
+
+
+                Call<Void> call  = orderAPI.createOrder(order, bundle.getLong("idStaff"),bundle.getLong("idTable"));
+                call.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
     }
 
     @Override

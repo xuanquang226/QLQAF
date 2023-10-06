@@ -9,10 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 
 import com.example.qlqa.adapter.TableAdapter;
@@ -21,7 +18,6 @@ import com.example.qlqa.model.DinnerTable;
 import com.example.qlqa.utils.RetrofitClient;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -76,12 +72,12 @@ public class OrderAcitivity extends AppCompatActivity {
                 tableAdapter = new TableAdapter(getApplicationContext(), new TableAdapter.ItemClickListener() {
                     @Override
                     public void onItemClick(DinnerTable dinnerTable) {
-                        Intent intent = new Intent(getApplicationContext(), OrderTwoActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putLong("idTable", dinnerTable.getoNumber());
-                        bundle.putString("nameStaff", dinnerTable.getOrder().getStaff().getNameStaff());
-                        intent.putExtra("intentTable",bundle);
-                        startActivity(intent);
+                        Intent intent = getIntent();
+                        Bundle bundle = intent.getExtras();
+                        bundle.putLong("idTable", dinnerTable.getId());
+                        Intent intent2 = new Intent(OrderAcitivity.this, OrderTwoActivity.class);
+                        intent2.putExtras(bundle);
+                        startActivity(intent2);
                         //Toast.makeText(OrderAcitivity.this, "Bàn " + dinnerTable.getoNumber(), Toast.LENGTH_SHORT).show();
                     }
                 });

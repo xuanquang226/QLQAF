@@ -5,7 +5,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,8 +44,8 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     @Override
     public void onBindViewHolder(@NonNull TableViewHolder holder, int position) {
         DinnerTable table = lTable.get(position);
-        holder.tv_oNumber.setText(String.valueOf(table.getoNumber()));
-        if(table.getOrder() != null){
+        holder.tv_oNumber.setText(String.valueOf(table.getId()));
+        if(table.isStt()){
             holder.tv_stt.setText("Đầy");
             holder.cardView.setBackgroundTintList(context.getColorStateList(R.color.moderate_blue));
         }else{

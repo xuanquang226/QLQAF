@@ -1,5 +1,8 @@
 package com.example.qlqa.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Dish {
 
     private long id;
@@ -7,6 +10,8 @@ public class Dish {
     private int quantity;
     private Boolean state;
     private double price;
+
+    private Set<Order> listOrder = new HashSet<Order>();
 
     public Dish() {}
 
@@ -60,6 +65,5 @@ public class Dish {
     public void setPrice(double d) {
         this.price = d;
     }
-
 
 }

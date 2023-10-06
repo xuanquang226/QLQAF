@@ -1,36 +1,34 @@
 package com.example.qlqa.model;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.io.Serializable;
-import java.lang.annotation.Annotation;
+import java.util.List;
 
 public class DinnerTable {
-    private long oNumber;
+    private long id;
 
-    private Order order;
+    private boolean stt;
+    private List<Order> order;
 
     public DinnerTable() {
     }
 
-    public DinnerTable(long oNumber, Order order) {
-        this.oNumber = oNumber;
-        this.order = order;
+    public DinnerTable(long oNumber, boolean stt) {
+        this.id = oNumber;
+        this.stt = stt;
     }
 
-    public long getoNumber() {
-        return oNumber;
+    public long getId() {
+        return id;
     }
 
-    public void setoNumber(long oNumber) {
-        this.oNumber = oNumber;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public Order getOrder() {
-        return order;
+    public boolean isStt() {
+        return stt;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setStt(boolean stt) {
+        this.stt = stt;
     }
 }

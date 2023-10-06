@@ -8,13 +8,9 @@ public class Order {
 
     private long idOrder;
 
-
-
     private Set<Dish> listMonAn = new HashSet<Dish>();
 
-
     private DinnerTable dinnerTable;
-
 
     private Staff staff;
 
@@ -22,17 +18,20 @@ public class Order {
 
     private boolean state;
 
+    private String note;
+
     public Order() {
 
     }
 
-    public Order(long idOrder, Set<Dish> listMonAn, DinnerTable dinnerTable, Staff staff, Date date, boolean state) {
+    public Order(long idOrder, Set<Dish> listMonAn, DinnerTable dinnerTable, Staff staff, Date date, boolean state, String note) {
         this.idOrder = idOrder;
         this.listMonAn = listMonAn;
         this.dinnerTable = dinnerTable;
         this.staff = staff;
         this.date = date;
         this.state = state;
+        this.note = note;
     }
 
 
@@ -95,5 +94,13 @@ public class Order {
 
     public void setMonAn(Dish dish) {
         this.listMonAn.add(dish);
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }
