@@ -1,64 +1,65 @@
 package com.example.qlqa.model;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 public class Order {
 
-    private long idOrder;
+    private long id;
 
-    private Set<Dish> listMonAn = new HashSet<Dish>();
+    private Set<DishOrder> listMonAn = new HashSet<DishOrder>();
 
     private DinnerTable dinnerTable;
 
     private Staff staff;
 
-    private Date date;
+    private String dateCreate;
 
     private boolean state;
 
-    private String note;
+    private double totalPrice;
 
     public Order() {
 
     }
 
-    public Order(long idOrder, Set<Dish> listMonAn, DinnerTable dinnerTable, Staff staff, Date date, boolean state, String note) {
-        this.idOrder = idOrder;
-        this.listMonAn = listMonAn;
+    public Order(long id, DinnerTable dinnerTable, Staff staff, String date_create, boolean state) {
+        this.id = id;
         this.dinnerTable = dinnerTable;
         this.staff = staff;
-        this.date = date;
+        this.dateCreate = date_create;
         this.state = state;
-        this.note = note;
     }
 
 
-    public Date getDate() {
-        return date;
+    public String getDate() {
+        return dateCreate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDate(String date_create) {
+        this.dateCreate = date_create;
     }
 
     public long getId() {
-        return idOrder;
+        return id;
     }
 
 
     public void setId(int idOrder) {
-        this.idOrder = idOrder;
+        this.id = idOrder;
     }
 
 
-    public Set<Dish> getListMonAn() {
+    public Set<DishOrder> getListMonAn() {
         return listMonAn;
     }
 
 
-    public void setListMonAn(Set<Dish> listMonAn) {
+    public void setListMonAn(Set<DishOrder> listMonAn) {
         this.listMonAn = listMonAn;
     }
 
@@ -92,15 +93,15 @@ public class Order {
     }
 
 
-    public void setMonAn(Dish dish) {
-        this.listMonAn.add(dish);
+    public void setMonAn(DishOrder dishOrder) {
+        this.listMonAn.add(dishOrder);
     }
 
-    public String getNote() {
-        return note;
+    public void setTotalPrice(double totalPrice){
+        this.totalPrice = totalPrice;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public double getTotalPrice(){
+        return totalPrice;
     }
 }

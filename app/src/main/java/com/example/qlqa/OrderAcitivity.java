@@ -78,7 +78,6 @@ public class OrderAcitivity extends AppCompatActivity {
                         Intent intent2 = new Intent(OrderAcitivity.this, OrderTwoActivity.class);
                         intent2.putExtras(bundle);
                         startActivity(intent2);
-                        //Toast.makeText(OrderAcitivity.this, "Bàn " + dinnerTable.getoNumber(), Toast.LENGTH_SHORT).show();
                     }
                 });
                 tableAdapter.setData(response.body());

@@ -30,13 +30,14 @@ import android.widget.Toast;
 import com.example.qlqa.api.DishAPI;
 import com.example.qlqa.api.InfoTableAPI;
 import com.example.qlqa.api.OrderAPI;
-import com.example.qlqa.api.StaffAPI;
-import com.example.qlqa.model.DinnerTable;
 import com.example.qlqa.model.Dish;
+import com.example.qlqa.model.DishOrder;
 import com.example.qlqa.model.Order;
 import com.example.qlqa.model.Row;
 import com.example.qlqa.utils.RetrofitClient;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -307,7 +308,7 @@ public class OrderTwoActivity extends AppCompatActivity {
                         for (int j = 0; j < rowListAtt.size(); j++) {
                             totalPrice += Double.parseDouble(rowListAtt.get(j).getTvPrice().getText().toString());
                         }
-                        tv_total_amount.setText(totalPrice + " Đ");
+                        tv_total_amount.setText(String.valueOf(totalPrice));
                     } else {
                         Toast.makeText(OrderTwoActivity.this, "Hết món " + rowListAtt.get(position).getTvNameDish().getText(), Toast.LENGTH_SHORT).show();
                     }
@@ -339,7 +340,7 @@ public class OrderTwoActivity extends AppCompatActivity {
                     for (int j = 0; j < rowListAtt.size(); j++) {
                         totalPrice += Double.parseDouble(rowListAtt.get(j).getTvPrice().getText().toString());
                     }
-                    tv_total_amount.setText(totalPrice + " Đ");
+                    tv_total_amount.setText(String.valueOf(totalPrice));
                 }
             });
 
@@ -375,49 +376,84 @@ public class OrderTwoActivity extends AppCompatActivity {
         }
 
         btn_confirm.setOnClickListener(new View.OnClickListener() {
+            OrderAPI orderAPI = retrofit.create(OrderAPI.class);
+            DishAPI dishAPI = retrofit.create(DishAPI.class);
             @Override
             public void onClick(View view) {
-                Set<Dish> dishSet = new HashSet<>();
-
+                Set<DishOrder> dishSet = new HashSet<>();
+                List<Dish> lDish = response.body();
                 for (int i = 0; i < rowListAtt.size(); i++) {
-                    if (Integer.parseInt(rowListAtt.get(i).getTvQuantity().getText().toString()) > 0) {
-                        Dish dish = new Dish();
-                        dish.setName(rowListAtt.get(i).getTvNameDish().getText().toString());
-                        dish.setPrice(Double.parseDouble(rowListAtt.get(i).getTvPrice().getText().toString()));
-                        dish.setQuantity(Integer.parseInt(rowListAtt.get(i).getTvQuantity().getText().toString()));
-//                        for(Dish dish2: response.body()){
-//                            if(dish2.getName().equalsIgnoreCase(rowListAtt.get(i).getTvNameDish().getText().toString())){
-//                               dish.setId(dish2.getId());
-//                                Toast.makeText(OrderTwoActivity.this, dish2.getId() + "", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-                        dishSet.add(dish);
-                        if(rowListAtt.get(i).getTvNote().getText().toString() != null && !rowListAtt.get(i).getTvNote().getText().toString().equals("Nhấn")) {
-                            note += (rowListAtt.get(i).getTvNote().getText().toString() + "--");
+                    int quantityAtPosition = Integer.parseInt(rowListAtt.get(i).getTvQuantity().getText().toString());
+                    if (quantityAtPosition > 0) {
+                        DishOrder dishOrder = new DishOrder();
+                        dishOrder.setName(rowListAtt.get(i).getTvNameDish().getText().toString());
+                        dishOrder.setPrice(Double.parseDouble(rowListAtt.get(i).getTvPrice().getText().toString()));
+                        dishOrder.setQuantity(Integer.parseInt(rowListAtt.get(i).getTvQuantity().getText().toString()));
+                        if(!rowListAtt.get(i).getTvNote().getText().toString().isEmpty() && !rowListAtt.get(i).getTvNote().getText().toString().equals("Nhấn")) {
+                            dishOrder.setNote(rowListAtt.get(i).getTvNote().getText().toString());
+                        }else{
+                            dishOrder.setNote("");
+                        }
+                        dishSet.add(dishOrder);
+                    }
+                    // Quantity Decrease
+                    for(int j = 0; j < lDish.size(); j++){
+                        if(quantityAtPosition > 0 && rowListAtt.get(i).getTvNameDish().getText().toString().equals(lDish.get(j).getName())){
+                            lDish.get(j).setQuantity(lDish.get(j).getQuantity() - quantityAtPosition);
+                            Call<String> call = dishAPI.putNameAQuantityDish(lDish.get(j).getId(), lDish.get(j));
+                            call.enqueue(new Callback<String>() {
+                                @Override
+                                public void onResponse(Call<String> call, Response<String> response) {
+
+                                }
+
+                                @Override
+                                public void onFailure(Call<String> call, Throwable t) {
+
+                                }
+                            });
                         }
                     }
                 }
-//                Toast.makeText(OrderTwoActivity.this, "Số bàn " + bundle.getLong("idTable"), Toast.LENGTH_SHORT).show();
+
+                // Create order
                 Order order = new Order();
                 order.setListMonAn(dishSet);
-                order.setNote(note);
+                LocalDateTime localDateTime = LocalDateTime.now();
+                String date = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                order.setDate(date);
+                order.setState(true);
+                order.setTotalPrice(Double.parseDouble(tv_total_amount.getText().toString()));
 
-                Retrofit retrofit1 = RetrofitClient.getClient();
-                OrderAPI orderAPI = retrofit1.create(OrderAPI.class);
 
-
-                Call<Void> call  = orderAPI.createOrder(order, bundle.getLong("idStaff"),bundle.getLong("idTable"));
-                call.enqueue(new Callback<Void>() {
+                Call<Long> call  = orderAPI.createOrder(order, bundle.getLong("idStaff"),bundle.getLong("idTable"));
+                call.enqueue(new Callback<Long>() {
                     @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    public void onResponse(Call<Long> call, Response<Long> response) {
+                        InfoTableAPI infoTableAPI = retrofit.create(InfoTableAPI.class);
+                        Call<Void> call1 = infoTableAPI.updateIdOrderForTable(bundle.getLong("idTable"),response.body());
+                        call1.enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
 
+                            }
+
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+
+                            }
+                        });
                     }
 
                     @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
+                    public void onFailure(Call<Long> call, Throwable t) {
 
                     }
                 });
+
+                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+                intent1.putExtras(bundle);
+                startActivity(intent1);
             }
         });
     }

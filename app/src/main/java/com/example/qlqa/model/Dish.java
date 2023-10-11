@@ -8,18 +8,16 @@ public class Dish {
     private long id;
     private String name;
     private int quantity;
-    private Boolean state;
     private double price;
 
     private Set<Order> listOrder = new HashSet<Order>();
 
     public Dish() {}
 
-    public Dish(long id, String name, int quantity, Boolean state, double price) {
+    public Dish(long id, String name, int quantity, double price) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
-        this.state = state;
         this.price = price;
     }
 
@@ -48,14 +46,7 @@ public class Dish {
         this.quantity = quantity;
     }
 
-    public Boolean getState() {
-        return state;
-    }
 
-
-    public void setState(Boolean state) {
-        this.state = state;
-    }
 
     public double getPrice() {
         return price;

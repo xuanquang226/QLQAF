@@ -15,6 +15,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".PaymentTableActivity"
+            android:exported="false" />
+        <activity
             android:name=".OrderTwoActivity"
             android:exported="false" />
         <activity
@@ -22,13 +25,13 @@
             android:exported="false" />
         <activity
             android:name=".TimeKeepingActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".StatictisActivity"
             android:exported="false" />
         <activity
             android:name=".PaymentActivity"
-            android:exported="false" />
+            android:exported="false"></activity>
         <activity
             android:name=".OrderAcitivity"
             android:exported="false" />

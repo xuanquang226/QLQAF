@@ -10,20 +10,18 @@ public class DishOrder {
 	private long id;
 	private String name;
 	private int quantity;
-	private Boolean state;
 	private double price;
 
-
+	private String note;
 	private Set<Order> listOrder = new HashSet<Order>();
 
 	public DishOrder() {
 	}
 
-	public DishOrder(long id, String name, int quantity, Boolean state, double price) {
+	public DishOrder(long id, String name, int quantity, double price) {
 		this.id = id;
 		this.name = name;
 		this.quantity = quantity;
-		this.state = state;
 		this.price = price;
 	}
 
@@ -51,13 +49,7 @@ public class DishOrder {
 		this.quantity = quantity;
 	}
 
-	public Boolean getState() {
-		return state;
-	}
 
-	public void setState(Boolean state) {
-		this.state = state;
-	}
 
 	public double getPrice() {
 		return price;
@@ -69,5 +61,13 @@ public class DishOrder {
 
 	public void setIdOrder(Order o) {
 		listOrder.add(o);
+	}
+
+	public void setNote(String note){
+		this.note = note;
+	}
+
+	public String getNote(){
+		return note;
 	}
 }

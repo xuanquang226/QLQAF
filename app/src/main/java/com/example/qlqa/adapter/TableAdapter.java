@@ -45,16 +45,19 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     public void onBindViewHolder(@NonNull TableViewHolder holder, int position) {
         DinnerTable table = lTable.get(position);
         holder.tv_oNumber.setText(String.valueOf(table.getId()));
-        if(table.isStt()){
-            holder.tv_stt.setText("Đầy");
-            holder.cardView.setBackgroundTintList(context.getColorStateList(R.color.moderate_blue));
-        }else{
-            holder.tv_stt.setText("Trống");
-            holder.cardView.setBackgroundTintList(context.getColorStateList(R.color.gray));
+        if(table.getIdOrder() != 0){
+            holder.tv_oNumber.setText(table.getId() + "");
+            if(table.getIdOrder() != 0){
+                holder.tv_stt.setText("Đầy");
+                holder.cardView.setBackgroundTintList(context.getColorStateList(R.color.moderate_blue));
+            }else{
+                holder.tv_stt.setText("Trống");
+                holder.cardView.setBackgroundTintList(context.getColorStateList(R.color.gray));
+            }
+            holder.itemView.setOnClickListener(view -> {
+                onItemClickListener.onItemClick(table);
+            });
         }
-        holder.itemView.setOnClickListener(view -> {
-            onItemClickListener.onItemClick(lTable.get(position));
-        });
     }
 
     @Override

@@ -8,6 +8,10 @@ public class DinnerTable {
     private boolean stt;
     private List<Order> order;
 
+    private long idOrder;
+
+
+
     public DinnerTable() {
     }
 
@@ -30,5 +34,12 @@ public class DinnerTable {
 
     public void setStt(boolean stt) {
         this.stt = stt;
+    }
+    public void setIdOrder(long idOrder) {
+        this.idOrder = idOrder;
+    }
+
+    public long getIdOrder() {
+        return idOrder;
     }
 }
