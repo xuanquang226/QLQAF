@@ -11,12 +11,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-
-import com.example.qlqa.adapter.TableAdapter;
+import com.example.qlqa.adapter.TableAdapter2;
 import com.example.qlqa.api.InfoTableAPI;
 import com.example.qlqa.model.DinnerTable;
 import com.example.qlqa.utils.RetrofitClient;
-
 
 import java.util.List;
 
@@ -25,71 +23,51 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class OrderAcitivity extends AppCompatActivity {
-    private TableAdapter tableAdapter;
-    List<DinnerTable> llTable;
+public class PaymentTableActivity extends AppCompatActivity {
+    private Retrofit retrofit;
+
+    private Intent intent;
+    private Bundle bundle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.order_layout);
-
+        setContentView(R.layout.payment_table_layout);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(R.string.list_table);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setBackgroundDrawable(getDrawable(R.color.moderate_blue));
 
+        intent = getIntent();
+        bundle = intent.getExtras();
+
+        retrofit = RetrofitClient.getClient();
         getInfoTable();
-
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return false;
-        }
-    }
-
-//    public List<DinnerTable> createTempData(){
-//        llTable = new ArrayList<DinnerTable>();
-//        llTable.add(new DinnerTable(1, true));
-//        llTable.add(new DinnerTable(2, true));
-//        llTable.add(new DinnerTable(3, false));
-//        llTable.add(new DinnerTable(4, true));
-//        return llTable;
-//    }
 
     public void getInfoTable(){
-        Retrofit retrofit = RetrofitClient.getClient();
         InfoTableAPI infoTableAPI = retrofit.create(InfoTableAPI.class);
         Call<List<DinnerTable>> call = infoTableAPI.getInfoTable();
         call.enqueue(new Callback<List<DinnerTable>>() {
             @Override
             public void onResponse(Call<List<DinnerTable>> call, Response<List<DinnerTable>> response) {
-                tableAdapter = new TableAdapter(getApplicationContext(), new TableAdapter.ItemClickListener() {
+                TableAdapter2 tableAdapter2 = new TableAdapter2(getApplicationContext(), new TableAdapter2.ItemClickListener() {
                     @Override
-                    public void onItemClick(DinnerTable dinnerTable) {
-                        Intent intent = getIntent();
-                        Bundle bundle = intent.getExtras();
+                    public void onClick(DinnerTable dinnerTable) {
+                        Intent intent1 = new Intent(getApplicationContext(), PaymentActivity.class);
                         bundle.putLong("idTable", dinnerTable.getId());
-                        Intent intent2 = new Intent(OrderAcitivity.this, OrderTwoActivity.class);
-                        intent2.putExtras(bundle);
-                        startActivity(intent2);
+                        bundle.putLong("idOrder", dinnerTable.getIdOrder());
+                        intent1.putExtras(bundle);
+                        startActivity(intent1);
                     }
                 });
-                tableAdapter.setData(response.body());
-
-                RecyclerView recyclerView = findViewById(R.id.rcv_ltb);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(OrderAcitivity.this, LinearLayoutManager.VERTICAL, false);
-
-                recyclerView.setLayoutManager(layoutManager);
-                recyclerView.setAdapter(tableAdapter);
+                tableAdapter2.setDinnerTableList(response.body());
+                RecyclerView recyclerView = findViewById(R.id.rcv_payment_table_list);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
                 RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
+                recyclerView.setAdapter(tableAdapter2);
+                recyclerView.setLayoutManager(linearLayoutManager);
                 recyclerView.addItemDecoration(itemDecoration);
-
             }
 
             @Override
@@ -99,4 +77,12 @@ public class OrderAcitivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

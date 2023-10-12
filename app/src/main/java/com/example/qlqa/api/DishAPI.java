@@ -24,5 +24,7 @@ public interface DishAPI {
     Call<Void> postNewDish(@Body Dish dish);
 
     @DELETE("/dish/{id}")
-    Call<Void> deleteDish(@Path ("id") long id);
+    Call<Void> deleteDish(@Path("id") long id);
+
+
 }

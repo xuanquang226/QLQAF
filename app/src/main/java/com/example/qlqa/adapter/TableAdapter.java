@@ -5,7 +5,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,7 +28,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<DinnerTable> lTable){
+    public void setData(List<DinnerTable> lTable) {
         this.lTable = lTable;
         notifyDataSetChanged();
     }
@@ -45,17 +44,19 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     @Override
     public void onBindViewHolder(@NonNull TableViewHolder holder, int position) {
         DinnerTable table = lTable.get(position);
-        holder.tv_oNumber.setText(String.valueOf(table.getoNumber()));
-        if(table.isStt()){
+        holder.tv_oNumber.setText(String.valueOf(table.getId()));
+        holder.tv_oNumber.setText(table.getId() + "");
+        if (table.getIdOrder() != 0) {
             holder.tv_stt.setText("Đầy");
             holder.cardView.setBackgroundTintList(context.getColorStateList(R.color.moderate_blue));
-        }else{
+        } else {
             holder.tv_stt.setText("Trống");
             holder.cardView.setBackgroundTintList(context.getColorStateList(R.color.gray));
         }
         holder.itemView.setOnClickListener(view -> {
-            onItemClickListener.onItemClick(lTable.get(position));
+            onItemClickListener.onItemClick(table);
         });
+
     }
 
     @Override
@@ -64,7 +65,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     }
 
 
-    public static class TableViewHolder extends RecyclerView.ViewHolder{
+    public static class TableViewHolder extends RecyclerView.ViewHolder {
         private final TextView tv_oNumber;
         private final TextView tv_stt;
         private CardView cardView;
@@ -77,7 +78,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
         }
     }
 
-    public interface ItemClickListener{
+    public interface ItemClickListener {
         void onItemClick(DinnerTable dinnerTable);
     }
 }

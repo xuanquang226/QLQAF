@@ -2,7 +2,7 @@ package com.example.qlqa.model;
 
 public class Account {
 
-    private int idAccount;
+    private long idS;
 
     private String username;
 
@@ -17,19 +17,19 @@ public class Account {
         this.password = password;
     }
 
-    public Account(int idAccount, String username, String password, boolean typeA) {
-        this.idAccount = idAccount;
+    public Account(long idAccount, String username, String password, boolean typeA) {
+        this.idS = idAccount;
         this.username = username;
         this.password = password;
         this.typeA = typeA;
     }
 
-    public int getIdAccount() {
-        return idAccount;
+    public long getIdS() {
+        return idS;
     }
 
-    public void setIdAccount(int idAccount) {
-        this.idAccount = idAccount;
+    public void setIdS(long idS) {
+        this.idS = idS;
     }
 
     public String getUsername() {

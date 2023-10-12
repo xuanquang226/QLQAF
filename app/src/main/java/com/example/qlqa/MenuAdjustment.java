@@ -120,6 +120,7 @@ public class MenuAdjustment extends AppCompatActivity {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
                                         Toast.makeText(MenuAdjustment.this, "Món "+ dish.getName() + " đã bị xoá", Toast.LENGTH_SHORT).show();
+
                                     }
 
                                     @Override
@@ -147,6 +148,7 @@ public class MenuAdjustment extends AppCompatActivity {
 
                 RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
                 rcvDish.addItemDecoration(itemDecoration);
+
 
             }
 
@@ -198,6 +200,7 @@ public class MenuAdjustment extends AppCompatActivity {
                         call.enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
+
 
                             }
 

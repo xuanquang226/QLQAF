@@ -17,24 +17,34 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.qlqa.api.StaffAPI;
+import com.example.qlqa.model.Staff;
+import com.example.qlqa.utils.RetrofitClient;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button btn_order, btn_payment, btn_statistics, btn_timekeeping, btn_menuAdjustment;
     private boolean typeAccount;
     private Intent intent;
     private Bundle bundle;
+    private TextView tv_user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
 
         intent = getIntent();
-        bundle = intent.getBundleExtra("info");
+        bundle = intent.getExtras();
 
-
-        TextView tv_user = (TextView) findViewById(R.id.tv_name);
-        tv_user.setText(bundle.getString("username"));
+        tv_user = (TextView) findViewById(R.id.tv_name);
         typeAccount = bundle.getBoolean("typeA");
+
+        getStaff(bundle.getLong("idS"));
 
 
         btn_order = (Button) findViewById(R.id.btn_order);
@@ -85,11 +95,32 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void getStaff(long idAccount){
+        Retrofit retrofit = RetrofitClient.getClient();
+        StaffAPI staffAPI = retrofit.create(StaffAPI.class);
+        Call<Staff> call = staffAPI.getStaff(idAccount);
+        call.enqueue(new Callback<Staff>() {
+            @Override
+            public void onResponse(Call<Staff> call, Response<Staff> response) {
+                Staff staff = response.body();
+                tv_user.setText(staff.getNameStaff());
+                bundle.putLong("idStaff", staff.getIdStaff());
+            }
+
+            @Override
+            public void onFailure(Call<Staff> call, Throwable t) {
+
+            }
+        });
+    }
+
     public void transOrderActivity(){
         btn_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, OrderAcitivity.class));
+                intent = new Intent(MainActivity.this, OrderAcitivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
     }
@@ -97,7 +128,9 @@ public class MainActivity extends AppCompatActivity {
         btn_payment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, PaymentActivity.class));
+                intent = new Intent(MainActivity.this, PaymentTableActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
     }
