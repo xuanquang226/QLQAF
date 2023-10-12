@@ -22,12 +22,12 @@ public class TableAdapter2 extends RecyclerView.Adapter<TableAdapter2.TableViewH
 
     private ItemClickListener itemClickListener;
 
-    public TableAdapter2(Context mContext, ItemClickListener itemClickListener){
+    public TableAdapter2(Context mContext, ItemClickListener itemClickListener) {
         this.mContext = mContext;
         this.itemClickListener = itemClickListener;
     }
 
-    public void setDinnerTableList(List<DinnerTable> dinnerTableList){
+    public void setDinnerTableList(List<DinnerTable> dinnerTableList) {
         this.dinnerTableList = dinnerTableList;
     }
 
@@ -41,20 +41,16 @@ public class TableAdapter2 extends RecyclerView.Adapter<TableAdapter2.TableViewH
     @Override
     public void onBindViewHolder(@NonNull TableViewHolder holder, int position) {
         DinnerTable dinnerTable = dinnerTableList.get(position);
-        if(dinnerTable.getIdOrder() != 0){
-            holder.tvIdTable.setText(dinnerTable.getId() + "");
-            if(dinnerTable.getIdOrder() != 0){
-                holder.tvStatusTable.setText("Đầy");
-                holder.cardView.setBackgroundTintList(mContext.getColorStateList(R.color.moderate_blue));
-            }else{
-                holder.tvStatusTable.setText("Trống");
-                holder.cardView.setBackgroundTintList(mContext.getColorStateList(R.color.gray));
-            }
-            holder.itemView.setOnClickListener(view -> {
-                itemClickListener.onClick(dinnerTable);
-            });
+        holder.tvIdTable.setText(dinnerTable.getId() + "");
+        if (dinnerTable.getIdOrder() != 0) {
+            holder.tvStatusTable.setText("Đầy");
+            holder.cardView.setBackgroundTintList(mContext.getColorStateList(R.color.moderate_blue));
+        } else {
+            holder.cardView.setVisibility(View.GONE);
         }
-
+        holder.itemView.setOnClickListener(view -> {
+            itemClickListener.onClick(dinnerTable);
+        });
     }
 
     @Override
@@ -66,6 +62,7 @@ public class TableAdapter2 extends RecyclerView.Adapter<TableAdapter2.TableViewH
         private TextView tvIdTable, tvStatusTable;
 
         private CardView cardView;
+
         public TableViewHolder(@NonNull View itemView) {
             super(itemView);
             tvIdTable = itemView.findViewById(R.id.tv_id_table);
@@ -74,7 +71,7 @@ public class TableAdapter2 extends RecyclerView.Adapter<TableAdapter2.TableViewH
         }
     }
 
-    public interface ItemClickListener{
+    public interface ItemClickListener {
         void onClick(DinnerTable dinnerTable);
     }
 }

@@ -28,7 +28,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<DinnerTable> lTable){
+    public void setData(List<DinnerTable> lTable) {
         this.lTable = lTable;
         notifyDataSetChanged();
     }
@@ -45,19 +45,18 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     public void onBindViewHolder(@NonNull TableViewHolder holder, int position) {
         DinnerTable table = lTable.get(position);
         holder.tv_oNumber.setText(String.valueOf(table.getId()));
-        if(table.getIdOrder() != 0){
-            holder.tv_oNumber.setText(table.getId() + "");
-            if(table.getIdOrder() != 0){
-                holder.tv_stt.setText("Đầy");
-                holder.cardView.setBackgroundTintList(context.getColorStateList(R.color.moderate_blue));
-            }else{
-                holder.tv_stt.setText("Trống");
-                holder.cardView.setBackgroundTintList(context.getColorStateList(R.color.gray));
-            }
-            holder.itemView.setOnClickListener(view -> {
-                onItemClickListener.onItemClick(table);
-            });
+        holder.tv_oNumber.setText(table.getId() + "");
+        if (table.getIdOrder() != 0) {
+            holder.tv_stt.setText("Đầy");
+            holder.cardView.setBackgroundTintList(context.getColorStateList(R.color.moderate_blue));
+        } else {
+            holder.tv_stt.setText("Trống");
+            holder.cardView.setBackgroundTintList(context.getColorStateList(R.color.gray));
         }
+        holder.itemView.setOnClickListener(view -> {
+            onItemClickListener.onItemClick(table);
+        });
+
     }
 
     @Override
@@ -66,7 +65,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     }
 
 
-    public static class TableViewHolder extends RecyclerView.ViewHolder{
+    public static class TableViewHolder extends RecyclerView.ViewHolder {
         private final TextView tv_oNumber;
         private final TextView tv_stt;
         private CardView cardView;
@@ -79,7 +78,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
         }
     }
 
-    public interface ItemClickListener{
+    public interface ItemClickListener {
         void onItemClick(DinnerTable dinnerTable);
     }
 }

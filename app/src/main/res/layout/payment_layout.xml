@@ -5,13 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/back_ground"
     tools:context=".PaymentActivity">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcv_dish_order"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.8"/>
+        android:layout_weight="0.8">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_dish_order"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,18 +38,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tổng tiền : "
-                android:textSize="27sp"/>
+                android:textSize="27sp"
+                android:textColor="@color/dark_blue"/>
             <TextView
                 android:id="@+id/tv_total_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="500000"
-                android:textSize="27sp"/>
+                android:textSize="27sp"
+                android:textColor="@color/black"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" đồng"
-                android:textSize="27sp"/>
+                android:textSize="27sp"
+                android:textColor="@color/black"/>
         </LinearLayout>
         <Button
             android:id="@+id/btn_confirm_payment"
@@ -56,6 +64,7 @@
             android:padding="20sp"
             android:textSize="23sp"
             android:layout_marginBottom="10dp"
+            android:background="@drawable/btn_login_custom"
             />
 
     </LinearLayout>

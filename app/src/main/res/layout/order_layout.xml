@@ -8,11 +8,14 @@
     android:orientation="vertical"
     tools:context=".OrderAcitivity">
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcv_ltb"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="25dp" />
+        android:layout_margin="25dp">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_ltb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </ScrollView>
 </LinearLayout>

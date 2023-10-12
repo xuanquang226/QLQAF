@@ -25,12 +25,21 @@ import retrofit2.Retrofit;
 
 public class PaymentTableActivity extends AppCompatActivity {
     private Retrofit retrofit;
+
+    private Intent intent;
+    private Bundle bundle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.payment_table_layout);
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(R.string.list_table);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setBackgroundDrawable(getDrawable(R.color.moderate_blue));
+
+        intent = getIntent();
+        bundle = intent.getExtras();
+
         retrofit = RetrofitClient.getClient();
         getInfoTable();
     }
@@ -45,12 +54,11 @@ public class PaymentTableActivity extends AppCompatActivity {
                 TableAdapter2 tableAdapter2 = new TableAdapter2(getApplicationContext(), new TableAdapter2.ItemClickListener() {
                     @Override
                     public void onClick(DinnerTable dinnerTable) {
-                        Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
-                        Bundle bundle = new Bundle();
+                        Intent intent1 = new Intent(getApplicationContext(), PaymentActivity.class);
                         bundle.putLong("idTable", dinnerTable.getId());
                         bundle.putLong("idOrder", dinnerTable.getIdOrder());
-                        intent.putExtras(bundle);
-                        startActivity(intent);
+                        intent1.putExtras(bundle);
+                        startActivity(intent1);
                     }
                 });
                 tableAdapter2.setDinnerTableList(response.body());

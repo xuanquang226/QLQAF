@@ -10,13 +10,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.qlqa.adapter.PaymentAdapter;
 import com.example.qlqa.api.DishOrderAPI;
+import com.example.qlqa.api.InfoTableAPI;
 import com.example.qlqa.api.OrderAPI;
-import com.example.qlqa.model.Dish;
 import com.example.qlqa.model.DishOrder;
 import com.example.qlqa.model.Order;
 import com.example.qlqa.utils.RetrofitClient;
@@ -34,7 +36,9 @@ public class PaymentActivity extends AppCompatActivity {
     private Retrofit retrofit;
     private Bundle bundle;
 
+    private Button btnPayment;
     private Intent intent;
+    private OrderAPI orderAPI;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,16 +51,20 @@ public class PaymentActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("Bàn " + bundle.getLong("idTable"));
+        actionBar.setBackgroundDrawable(getDrawable(R.color.moderate_blue));
 
         tvTotalPrice = findViewById(R.id.tv_total_price);
+        btnPayment = findViewById(R.id.btn_confirm_payment);
+
         createDataForAdapter();
-        setDataForView();
+        getOrderById();
 
     }
 
     public void createDataForAdapter(){
         DishOrderAPI dishOrderAPI = retrofit.create(DishOrderAPI.class);
-        Call<List<DishOrder>> call = dishOrderAPI.getListDishOrderWithIdOrder(bundle.getLong("idOrder"),bundle.getLong("idTable"));
+        Call<List<DishOrder>> call = dishOrderAPI.getListDishOrderWithIdOrder(bundle.getLong("idOrder"));
         call.enqueue(new Callback<List<DishOrder>>() {
             @Override
             public void onResponse(Call<List<DishOrder>> call, Response<List<DishOrder>> response) {
@@ -79,14 +87,51 @@ public class PaymentActivity extends AppCompatActivity {
         });
     }
 
-    public void setDataForView(){
-        OrderAPI orderAPI = retrofit.create(OrderAPI.class);
+    public void getOrderById(){
+        orderAPI = retrofit.create(OrderAPI.class);
         Call<Order> call = orderAPI.getOrderById(bundle.getLong("idOrder"));
         call.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
                 Order order = response.body();
                 tvTotalPrice.setText(String.valueOf(order.getTotalPrice()));
+
+                btnPayment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        order.setState(true);
+                        Call<String> callPutOrder = orderAPI.putOrder(order, bundle.getLong("idOrder"));
+                        callPutOrder.enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                Toast.makeText(PaymentActivity.this, response.body(), Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+
+                            }
+                        });
+
+                        InfoTableAPI infoTableAPI = retrofit.create(InfoTableAPI.class);
+                        Call<Void> callPutIdTable = infoTableAPI.updateIdOrderForTable(bundle.getLong("idTable"), 0);
+                        callPutIdTable.enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+
+                            }
+                        });
+                        Toast.makeText(PaymentActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }
+                });
             }
 
             @Override

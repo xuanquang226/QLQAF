@@ -118,9 +118,9 @@ public class MainActivity extends AppCompatActivity {
         btn_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1 = new Intent(MainActivity.this, OrderAcitivity.class);
-                intent1.putExtras(bundle);
-                startActivity(intent1);
+                intent = new Intent(MainActivity.this, OrderAcitivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
     }
@@ -128,7 +128,9 @@ public class MainActivity extends AppCompatActivity {
         btn_payment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, PaymentTableActivity.class));
+                intent = new Intent(MainActivity.this, PaymentTableActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
     }

@@ -11,5 +11,5 @@ import retrofit2.http.Query;
 
 public interface DishOrderAPI {
     @GET("/api/dishorder/{idOrder}")
-    Call<List<DishOrder>> getListDishOrderWithIdOrder(@Path("idOrder") long idOrder, @Query("idTable") long idTable);
+    Call<List<DishOrder>> getListDishOrderWithIdOrder(@Path("idOrder") long idOrder);
 }

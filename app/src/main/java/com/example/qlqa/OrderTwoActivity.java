@@ -28,8 +28,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.qlqa.api.DishAPI;
+import com.example.qlqa.api.DishOrderAPI;
 import com.example.qlqa.api.InfoTableAPI;
 import com.example.qlqa.api.OrderAPI;
+import com.example.qlqa.model.DinnerTable;
 import com.example.qlqa.model.Dish;
 import com.example.qlqa.model.DishOrder;
 import com.example.qlqa.model.Order;
@@ -373,6 +375,53 @@ public class OrderTwoActivity extends AppCompatActivity {
                     }
                 }
             });
+
+            // Lay du lieu don hang da dat tai ban so x
+            InfoTableAPI infoTableAPI = retrofit.create(InfoTableAPI.class);
+            Call<DinnerTable> dinnerTableCall = infoTableAPI.getTableById(bundle.getLong("idTable"));
+            dinnerTableCall.enqueue(new Callback<DinnerTable>() {
+                @Override
+                public void onResponse(Call<DinnerTable> call, Response<DinnerTable> response) {
+                    DishOrderAPI dishOrderAPI = retrofit.create(DishOrderAPI.class);
+                    if(response.body().getIdOrder() != 0){
+                        Call<List<DishOrder>> callList = dishOrderAPI.getListDishOrderWithIdOrder(response.body().getIdOrder());
+                        callList.enqueue(new Callback<List<DishOrder>>() {
+                            @Override
+                            public void onResponse(Call<List<DishOrder>> call, Response<List<DishOrder>> response) {
+                                double price = 0.0;
+                                List<DishOrder> dishOrderList = response.body();
+                                for(int i = 0; i < dishList.size(); i++){
+                                    for(int j = 0; j < dishOrderList.size(); j++){
+                                        if(dishOrderList.get(j).getName().equalsIgnoreCase(dishList.get(i).getName())){
+                                            rowListAtt.get(i).getTvQuantity().setText(String.valueOf(dishOrderList.get(j).getQuantity()));
+                                            if(!dishOrderList.get(j).getNote().isEmpty()){
+                                                rowListAtt.get(i).getTvNote().setText(dishOrderList.get(j).getNote());
+                                            }else{
+                                                rowListAtt.get(i).getTvNote().setText("Nhấn");
+                                            }
+                                            rowListAtt.get(i).getTvPrice().setText(String.valueOf(dishOrderList.get(j).getPrice()));
+
+                                            price += dishOrderList.get(j).getPrice();
+                                        }
+                                    }
+                                }
+                                tv_total_amount.setText(String.valueOf(price));
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<DishOrder>> call, Throwable t) {
+
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<DinnerTable> call, Throwable t) {
+
+                }
+            });
+
         }
 
         btn_confirm.setOnClickListener(new View.OnClickListener() {
@@ -422,7 +471,7 @@ public class OrderTwoActivity extends AppCompatActivity {
                 LocalDateTime localDateTime = LocalDateTime.now();
                 String date = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                 order.setDate(date);
-                order.setState(true);
+                order.setState(false);
                 order.setTotalPrice(Double.parseDouble(tv_total_amount.getText().toString()));
 
 
@@ -450,7 +499,7 @@ public class OrderTwoActivity extends AppCompatActivity {
 
                     }
                 });
-
+                Toast.makeText(OrderTwoActivity.this, "Đặt món thành công", Toast.LENGTH_SHORT).show();
                 Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
                 intent1.putExtras(bundle);
                 startActivity(intent1);
