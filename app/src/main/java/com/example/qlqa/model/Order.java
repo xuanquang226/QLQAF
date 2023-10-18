@@ -2,6 +2,7 @@ package com.example.qlqa.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
@@ -17,7 +18,8 @@ public class Order {
 
     private Staff staff;
 
-    private String dateCreate;
+
+    private Timestamp dateCreate;
 
     private boolean state;
 
@@ -27,7 +29,7 @@ public class Order {
 
     }
 
-    public Order(long id, DinnerTable dinnerTable, Staff staff, String date_create, boolean state) {
+    public Order(long id, DinnerTable dinnerTable, Staff staff, Timestamp date_create, boolean state) {
         this.id = id;
         this.dinnerTable = dinnerTable;
         this.staff = staff;
@@ -36,11 +38,11 @@ public class Order {
     }
 
 
-    public String getDate() {
+    public Timestamp getDate() {
         return dateCreate;
     }
 
-    public void setDate(String date_create) {
+    public void setDate(Timestamp date_create) {
         this.dateCreate = date_create;
     }
 
