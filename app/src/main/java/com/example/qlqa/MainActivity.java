@@ -150,11 +150,9 @@ public class MainActivity extends AppCompatActivity {
         btn_timekeeping.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(typeAccount){
-                    startActivity(new Intent(MainActivity.this, TimeKeepingActivity.class));
-                }else{
-                    Toast.makeText(MainActivity.this, "Tai khoan cua ban khong du dieu kien su dung chuc nang nay", Toast.LENGTH_SHORT).show();
-                }
+                intent = new Intent(MainActivity.this, TimeKeepingActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
     }

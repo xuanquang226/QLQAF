@@ -1,6 +1,8 @@
 package com.example.qlqa.model;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Staff {
 
@@ -18,6 +20,7 @@ public class Staff {
 
     private List<Order> order;
 
+    private Set<TimeSheetsStaff> setTimeSheets;
 
     private Account account;
 
@@ -82,5 +85,13 @@ public class Staff {
 
     public List<Order> getOrder() {
         return order;
+    }
+
+    public Set<TimeSheetsStaff> getSetTimeSheets() {
+        return setTimeSheets;
+    }
+
+    public void setSetTimeSheets(Set<TimeSheetsStaff> setTimeSheets) {
+        this.setTimeSheets = setTimeSheets;
     }
 }

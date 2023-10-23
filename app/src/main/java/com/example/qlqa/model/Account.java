@@ -8,7 +8,7 @@ public class Account {
 
     private String password;
 
-    private boolean typeA;
+    private Boolean typeA;
 
     public Account(){}
 
@@ -17,7 +17,7 @@ public class Account {
         this.password = password;
     }
 
-    public Account(long idAccount, String username, String password, boolean typeA) {
+    public Account(long idAccount, String username, String password, Boolean typeA) {
         this.idS = idAccount;
         this.username = username;
         this.password = password;
@@ -48,7 +48,7 @@ public class Account {
         this.password = password;
     }
 
-    public boolean getTypeAccount() {
+    public Boolean getTypeAccount() {
         return typeA;
     }
 

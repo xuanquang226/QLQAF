@@ -90,8 +90,6 @@ public class OrderTwoActivity extends AppCompatActivity {
         actionBar.setBackgroundDrawable(getDrawable(R.color.moderate_blue));
 
 
-//        lv = findViewById(R.id.lv_list_dish);
-//        listView();
         edt_search = (EditText) findViewById(R.id.edt_search2);
         createMenuTable();
 
@@ -473,6 +471,7 @@ public class OrderTwoActivity extends AppCompatActivity {
 //                LocalDateTime localDateTime = LocalDateTime.now();
 //                String date = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
                 order.setDate(timestamp);
                 order.setState(false);
                 order.setTotalPrice(Double.parseDouble(tv_total_amount.getText().toString()));
