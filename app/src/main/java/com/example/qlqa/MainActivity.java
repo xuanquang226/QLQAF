@@ -1,12 +1,9 @@
 package com.example.qlqa;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuBuilder;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,11 +25,12 @@ import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btn_order, btn_payment, btn_statistics, btn_timekeeping, btn_menuAdjustment;
+    private Button btnOrder, btnPayment, btnStatistics, btnTimekeeping, btnMenuAdjustment, btnPayroll;
     private boolean typeAccount;
     private Intent intent;
     private Bundle bundle;
     private TextView tv_user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,18 +45,19 @@ public class MainActivity extends AppCompatActivity {
         getStaff(bundle.getLong("idS"));
 
 
-        btn_order = (Button) findViewById(R.id.btn_order);
-        btn_payment = (Button) findViewById(R.id.btn_payment);
-        btn_statistics = (Button) findViewById(R.id.btn_statistics);
-        btn_timekeeping = (Button) findViewById(R.id.btn_timekeeping);
-        btn_menuAdjustment = (Button) findViewById(R.id.btn_menu_adjust);
+        btnOrder = (Button) findViewById(R.id.btn_order);
+        btnPayment = (Button) findViewById(R.id.btn_payment);
+        btnStatistics = (Button) findViewById(R.id.btn_statistics);
+        btnTimekeeping = (Button) findViewById(R.id.btn_timekeeping);
+        btnMenuAdjustment = (Button) findViewById(R.id.btn_menu_adjust);
+        btnPayroll = (Button) findViewById(R.id.btn_payroll);
 
         transOrderActivity();
         transPaymentActivity();
         transStatisticsActivity();
         transTimeKeepingActivity();
         transMenuAdjustActivity();
-
+        transPayrollActivity();
 
 
         // Logout
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             @SuppressLint("NonConstantResourceId")
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                switch(menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
                     case R.id.itemLogout:
                         intent = new Intent(MainActivity.this, IntroduceActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -95,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void getStaff(long idAccount){
+    public void getStaff(long idAccount) {
         Retrofit retrofit = RetrofitClient.getClient();
         StaffAPI staffAPI = retrofit.create(StaffAPI.class);
         Call<Staff> call = staffAPI.getStaff(idAccount);
@@ -114,8 +113,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void transOrderActivity(){
-        btn_order.setOnClickListener(new View.OnClickListener() {
+    public void transOrderActivity() {
+        btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 intent = new Intent(MainActivity.this, OrderAcitivity.class);
@@ -124,8 +123,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    public void transPaymentActivity(){
-        btn_payment.setOnClickListener(new View.OnClickListener() {
+
+    public void transPaymentActivity() {
+        btnPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 intent = new Intent(MainActivity.this, PaymentTableActivity.class);
@@ -134,48 +134,58 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    public void transStatisticsActivity(){
-        btn_statistics.setOnClickListener(new View.OnClickListener() {
+
+    public void transStatisticsActivity() {
+        btnStatistics.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(typeAccount){
+                if (typeAccount) {
                     startActivity(new Intent(MainActivity.this, StatictisActivity.class));
-                }else{
-                    Toast.makeText(MainActivity.this, "Tai khoan cua ban khong du dieu kien su dung chuc nang nay", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-    public void transTimeKeepingActivity(){
-        btn_timekeeping.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(typeAccount){
-                    startActivity(new Intent(MainActivity.this, TimeKeepingActivity.class));
-                }else{
-                    Toast.makeText(MainActivity.this, "Tai khoan cua ban khong du dieu kien su dung chuc nang nay", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-    public void transMenuAdjustActivity(){
-        btn_menuAdjustment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(typeAccount){
-                    startActivity(new Intent(MainActivity.this, MenuAdjustment.class));
-                }else{
+                } else {
                     Toast.makeText(MainActivity.this, "Tai khoan cua ban khong du dieu kien su dung chuc nang nay", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
+    public void transTimeKeepingActivity() {
+        btnTimekeeping.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(MainActivity.this, TimeKeepingActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+    }
+
+    public void transMenuAdjustActivity() {
+        btnMenuAdjustment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (typeAccount) {
+                    startActivity(new Intent(MainActivity.this, MenuAdjustment.class));
+                } else {
+                    Toast.makeText(MainActivity.this, "Tai khoan cua ban khong du dieu kien su dung chuc nang nay", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    public void transPayrollActivity(){
+        btnPayroll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, PayrollActivity.class));
+            }
+        });
+    }
+
     @Override
-    public void onBackPressed(){
-        if(bundle.isEmpty()){
+    public void onBackPressed() {
+        if (bundle.isEmpty()) {
             super.onBackPressed();
-        }else{
+        } else {
             Toast.makeText(this, "Dang xuat de ve man hinh dang nhap", Toast.LENGTH_SHORT).show();
         }
     }

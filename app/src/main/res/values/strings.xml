@@ -17,4 +17,26 @@
     <string name="note">Ghi chú</string>
     <string name="confirm">Xác nhận</string>
     <string name="delete">Xoá</string>
+    <string name="payroll">Bảng lương</string>
+    <string-array name="month">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
+    <string-array name="year">
+        <item>2021</item>
+        <item>2022</item>
+        <item>2023</item>
+        <item>2024</item>
+        <item>2025</item>
+    </string-array>
 </resources>

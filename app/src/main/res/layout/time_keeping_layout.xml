@@ -1,16 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    tools:context=".TimeKeepingActivity">
-    <ImageButton
-        android:id="@+id/img_btn_test"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/baseline_add_24"
-        android:background="@drawable/img_button_color"
+    tools:context=".TimeKeepingActivity"
+    android:background="@color/back_ground">
+
+    <EditText
+        android:id="@+id/edtGenerate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:textColor="@color/black"
+        android:visibility="gone"
         />
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/llayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edtGenerate"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        <Button
+            android:id="@+id/btn_generate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tạo mã"
+            android:layout_below="@+id/edtGenerate"
+            android:background="@drawable/btn_login_custom"
+            />
+        <Button
+            android:id="@+id/btn_scanner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quét mã"
+            android:layout_toEndOf="@+id/btn_generate"
+            android:layout_alignBaseline="@+id/btn_generate"
+            android:background="@drawable/btn_login_custom"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imgQrcode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llayout"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/edtGenerate"
+        android:layout_alignEnd="@+id/edtGenerate"/>
+
+</RelativeLayout>

@@ -1,6 +1,7 @@
 package com.example.qlqa.model;
 
 import java.util.List;
+import java.util.Set;
 
 public class Staff {
 
@@ -11,13 +12,14 @@ public class Staff {
     private float workingHours;
 
 
-    private float oHourSalary;
+    private double oDaySalary;
 
 
     private String position;
 
     private List<Order> order;
 
+    private Set<TimeSheetsStaff> setTimeSheets;
 
     private Account account;
 
@@ -27,7 +29,7 @@ public class Staff {
         this.idStaff = idStaff;
         this.nameStaff = nameStaff;
         this.workingHours = workingHours;
-        this.oHourSalary = oHourSalary;
+        this.oDaySalary = oHourSalary;
         this.position = position;
         this.account = account;
     }
@@ -56,12 +58,12 @@ public class Staff {
         this.workingHours = workingHours;
     }
 
-    public float getoHourSalary() {
-        return oHourSalary;
+    public double getoDaySalary() {
+        return oDaySalary;
     }
 
-    public void setoHourSalary(float oHourSalary) {
-        this.oHourSalary = oHourSalary;
+    public void setoDaySalary(double oDaySalary) {
+        this.oDaySalary = oDaySalary;
     }
 
     public String getPosition() {
@@ -82,5 +84,13 @@ public class Staff {
 
     public List<Order> getOrder() {
         return order;
+    }
+
+    public Set<TimeSheetsStaff> getSetTimeSheets() {
+        return setTimeSheets;
+    }
+
+    public void setSetTimeSheets(Set<TimeSheetsStaff> setTimeSheets) {
+        this.setTimeSheets = setTimeSheets;
     }
 }

@@ -38,6 +38,8 @@ import com.example.qlqa.model.Order;
 import com.example.qlqa.model.Row;
 import com.example.qlqa.utils.RetrofitClient;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -88,8 +90,6 @@ public class OrderTwoActivity extends AppCompatActivity {
         actionBar.setBackgroundDrawable(getDrawable(R.color.moderate_blue));
 
 
-//        lv = findViewById(R.id.lv_list_dish);
-//        listView();
         edt_search = (EditText) findViewById(R.id.edt_search2);
         createMenuTable();
 
@@ -468,12 +468,13 @@ public class OrderTwoActivity extends AppCompatActivity {
                 // Create order
                 Order order = new Order();
                 order.setListMonAn(dishSet);
-                LocalDateTime localDateTime = LocalDateTime.now();
-                String date = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                order.setDate(date);
+//                LocalDateTime localDateTime = LocalDateTime.now();
+//                String date = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+                order.setDate(timestamp);
                 order.setState(false);
                 order.setTotalPrice(Double.parseDouble(tv_total_amount.getText().toString()));
-
 
                 Call<Long> call  = orderAPI.createOrder(order, bundle.getLong("idStaff"),bundle.getLong("idTable"));
                 call.enqueue(new Callback<Long>() {
