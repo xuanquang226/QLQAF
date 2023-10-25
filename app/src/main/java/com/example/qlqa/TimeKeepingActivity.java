@@ -56,6 +56,7 @@ public class TimeKeepingActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setBackgroundDrawable(getDrawable(R.color.moderate_blue));
 
         Intent intent = getIntent();
         bundle = intent.getExtras();
@@ -127,24 +128,22 @@ public class TimeKeepingActivity extends AppCompatActivity {
             TimeSheets timeSheets = new TimeSheets();
             timeSheets.setId(Long.parseLong(result.getContents()));
 
-            timeSheetsStaff.setTimestamp(new Timestamp(System.currentTimeMillis()));
             timeSheetsStaff.setTimeSheets(timeSheets);
 
             Retrofit retrofit = RetrofitClient.getClient();
             TimeSheetsStaffAPI timeSheetsStaffAPI = retrofit.create(TimeSheetsStaffAPI.class);
-            Call<Void> call = timeSheetsStaffAPI.postTimeSheetsStaff(timeSheetsStaff, bundle.getLong("idStaff"));
-            call.enqueue(new Callback<Void>() {
+            Call<String> call = timeSheetsStaffAPI.postTimeSheetsStaff(timeSheetsStaff, bundle.getLong("idStaff"));
+            call.enqueue(new Callback<String>() {
                 @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-
+                public void onResponse(Call<String> call, Response<String> response) {
+                    Toast.makeText(TimeKeepingActivity.this, response.body(), Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
-                public void onFailure(Call<Void> call, Throwable t) {
+                public void onFailure(Call<String> call, Throwable t) {
 
                 }
             });
-
         }
     });
 

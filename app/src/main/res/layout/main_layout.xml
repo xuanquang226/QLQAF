@@ -122,8 +122,21 @@
                     android:text="@string/menu_adjustment"
                     android:textSize="20sp"
                     android:layout_marginTop="25dp"
-                    android:layout_marginBottom="20dp"
                     android:background="@drawable/btn_login_custom"/>
+                <Button
+                    android:id="@+id/btn_payroll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="80dp"
+                    android:layout_below="@+id/btn_menu_adjust"
+                    android:layout_alignStart="@+id/btn_menu_adjust"
+                    android:layout_alignEnd="@+id/btn_menu_adjust"
+                    android:text="Bảng lương"
+                    android:textSize="20sp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="25dp"
+                    android:background="@drawable/btn_login_custom"
+
+                    />
 
             </RelativeLayout>
         </ScrollView>

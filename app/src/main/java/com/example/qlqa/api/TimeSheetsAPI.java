@@ -10,8 +10,6 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface TimeSheetsAPI {
-    @POST("/api/timesheets")
-    Call<Void> postTimeSheets(@Body TimeSheets timeSheets);
 
     @POST("/api/timesheets/getid")
     Call<Long> postAndGetId(@Body TimeSheets timeSheets);
