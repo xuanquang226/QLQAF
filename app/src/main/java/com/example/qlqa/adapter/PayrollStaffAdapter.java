@@ -1,10 +1,12 @@
 package com.example.qlqa.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,17 +21,18 @@ public class PayrollStaffAdapter extends RecyclerView.Adapter<PayrollStaffAdapte
     private List<PayrollStaff> payrollStaffList;
     private Context mContext;
 
+    public PayrollStaffAdapter() {
+    }
 
-    public PayrollStaffAdapter(){}
-
-    public PayrollStaffAdapter(Context mContext){
+    public PayrollStaffAdapter(Context mContext) {
         this.mContext = mContext;
     }
 
-    public void setPayrollStaffList(List<PayrollStaff> payrollStaffList){
+    public void setPayrollStaffList(List<PayrollStaff> payrollStaffList) {
         this.payrollStaffList = payrollStaffList;
         notifyDataSetChanged();
     }
+
 
     @NonNull
     @Override
@@ -45,15 +48,17 @@ public class PayrollStaffAdapter extends RecyclerView.Adapter<PayrollStaffAdapte
         holder.tvSTT.setText(String.valueOf(payrollStaff.getStaff().getIdStaff()));
         holder.tvSalary.setText(String.valueOf(payrollStaff.getSalary()));
         holder.tvCount.setText(String.valueOf(payrollStaff.getCount()));
-
     }
 
     @Override
     public int getItemCount() {
-        return payrollStaffList.size();
+        if (payrollStaffList != null) {
+            return payrollStaffList.size();
+        }
+        return 0;
     }
 
-    public class PayrollStaffViewHolder extends RecyclerView.ViewHolder{
+    public class PayrollStaffViewHolder extends RecyclerView.ViewHolder {
         private TextView tvSTT, tvName, tvCount, tvSalary;
 
         public PayrollStaffViewHolder(@NonNull View itemView) {

@@ -49,6 +49,7 @@ public class TimeKeepingActivity extends AppCompatActivity {
     private Button btnGenerate, btnScanner;
     private ImageView imageView;
     private Retrofit retrofit;
+    private Bitmap bitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,8 +91,7 @@ public class TimeKeepingActivity extends AppCompatActivity {
                         try {
                             BitMatrix bitMatrix = multiFormatWriter.encode(String.valueOf(response.body()), BarcodeFormat.QR_CODE, 300, 300);
                             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-                            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-                            imageView.setImageBitmap(bitmap);
+                            bitmap = barcodeEncoder.createBitmap(bitMatrix);
                         } catch (WriterException e) {
                             e.printStackTrace();
                         }
@@ -102,8 +102,10 @@ public class TimeKeepingActivity extends AppCompatActivity {
 
                     }
                 });
-
-
+                finish();
+                overridePendingTransition(1,1);
+                startActivity(getIntent());
+                imageView.setImageBitmap(bitmap);
             }
         });
     }
@@ -144,6 +146,7 @@ public class TimeKeepingActivity extends AppCompatActivity {
 
                 }
             });
+
         }
     });
 

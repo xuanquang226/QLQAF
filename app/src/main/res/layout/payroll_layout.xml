@@ -22,6 +22,7 @@
             android:textSize="35sp"
             android:layout_gravity="center_horizontal"/>
         <TextView
+            android:id="@+id/tv_month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="10"
@@ -41,18 +42,21 @@
             android:layout_height="match_parent"
             android:id="@+id/spinner_month"
             android:layout_marginEnd="5dp"
+            android:backgroundTint="@color/moderate_blue"
             />
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/spinner_year"
-            android:layout_marginStart="5dp"/>
+            android:layout_marginStart="5dp"
+            android:backgroundTint="@color/moderate_blue"/>
         <Button
-            android:id="@+id/btn_create_payroll"
+            android:id="@+id/btn_get_payroll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tạo"
-            android:background="@drawable/btn_login_custom"/>
+            android:text="Tìm kiếm"
+            android:background="@drawable/btn_login_custom"
+            android:textAllCaps="false"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -73,10 +77,6 @@
             android:textAlignment="center"
             android:gravity="center_vertical"
             tools:ignore="RtlCompat" />
-        <View
-            android:layout_width="0.2dp"
-            android:layout_height="match_parent"
-            android:background="@color/black"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -89,10 +89,7 @@
             android:gravity="center_vertical"
             tools:ignore="RtlCompat"
             />
-        <View
-            android:layout_width="0.2dp"
-            android:layout_height="match_parent"
-            android:background="@color/black"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -104,10 +101,7 @@
             android:textAlignment="center"
             android:gravity="center_vertical"
             tools:ignore="RtlCompat" />
-        <View
-            android:layout_width="0.2dp"
-            android:layout_height="match_parent"
-            android:background="@color/black"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
