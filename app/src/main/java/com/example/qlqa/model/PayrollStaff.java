@@ -13,13 +13,14 @@ public class PayrollStaff {
 
     private double salary;
 
-    private int countWork;
+    private int count;
 
     public PayrollStaff() {}
 
-    public PayrollStaff(long id, double salary) {
+    public PayrollStaff(long id, double salary, int count) {
         this.id = id;
         this.salary = salary;
+        this.count = count;
     }
 
 
@@ -55,11 +56,11 @@ public class PayrollStaff {
         this.salary = salary;
     }
 
-    public Integer getCount() {
-        return countWork;
+    public int getCount() {
+        return count;
     }
 
-    public void setCount(Integer countWork) {
-        this.countWork = countWork;
+    public void setCount(int countWork) {
+        this.count = count;
     }
 }

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -37,10 +38,18 @@ import retrofit2.Retrofit;
 public class MenuAdjustment extends AppCompatActivity {
     private DishAdapter dishAdapter;
     private DishAPI dishAPI;
+
+    private Intent intent;
+    private Bundle bundle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_adjustment_layout);
+
+        intent = getIntent();
+        bundle = intent.getExtras();
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Sửa món");
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -54,7 +63,7 @@ public class MenuAdjustment extends AppCompatActivity {
 
     public void getDish(){
 
-        Call<List<com.example.qlqa.model.Dish>> call = dishAPI.getListDish();
+        Call<List<com.example.qlqa.model.Dish>> call = dishAPI.getListDish(bundle.getString("token"));
 
         Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -93,7 +102,7 @@ public class MenuAdjustment extends AppCompatActivity {
                                 dish.setName(edtNewNameDish.getText().toString());
                                 dish.setQuantity(Integer.parseInt(edtNewQuantityDish.getText().toString()));
                                 dish.setPrice(Double.parseDouble(edtNewPriceDish.getText().toString()));
-                                Call<String> call1 = dishAPI.putNameAQuantityDish(dish.getId(), dish);
+                                Call<String> call1 = dishAPI.putNameAQuantityDish(dish.getId(), dish, bundle.getString("token"));
                                 call1.enqueue(new Callback<String>() {
                                     @Override
                                     public void onResponse(Call<String> call, Response<String> response) {
@@ -115,7 +124,7 @@ public class MenuAdjustment extends AppCompatActivity {
                         btnDialogDelete.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                Call<Void> call = dishAPI.deleteDish(dish.getId());
+                                Call<Void> call = dishAPI.deleteDish(dish.getId(), bundle.getString("token"));
                                 call.enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
@@ -196,7 +205,7 @@ public class MenuAdjustment extends AppCompatActivity {
                         dish.setName(edtNewNameDish.getText().toString());
                         dish.setQuantity(Integer.parseInt(edtNewQuantityDish.getText().toString()));
                         dish.setPrice(Double.parseDouble(edtNewPriceDish.getText().toString()));
-                        Call<Void> call = dishAPI.postNewDish(dish);
+                        Call<Void> call = dishAPI.postNewDish(dish, bundle.getString("token"));
                         call.enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
