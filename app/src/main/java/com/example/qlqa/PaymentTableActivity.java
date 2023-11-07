@@ -47,7 +47,7 @@ public class PaymentTableActivity extends AppCompatActivity {
 
     public void getInfoTable(){
         InfoTableAPI infoTableAPI = retrofit.create(InfoTableAPI.class);
-        Call<List<DinnerTable>> call = infoTableAPI.getInfoTable();
+        Call<List<DinnerTable>> call = infoTableAPI.getInfoTable(bundle.getString("token"));
         call.enqueue(new Callback<List<DinnerTable>>() {
             @Override
             public void onResponse(Call<List<DinnerTable>> call, Response<List<DinnerTable>> response) {

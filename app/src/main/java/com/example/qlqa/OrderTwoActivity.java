@@ -107,7 +107,7 @@ public class OrderTwoActivity extends AppCompatActivity {
     public void createMenuTable() {
         retrofit = RetrofitClient.getClient();
         DishAPI getDish = retrofit.create(DishAPI.class);
-        Call<List<com.example.qlqa.model.Dish>> call = getDish.getListDish();
+        Call<List<com.example.qlqa.model.Dish>> call = getDish.getListDish(bundle.getString("token"));
         call.enqueue(new Callback<List<com.example.qlqa.model.Dish>>() {
             @SuppressLint("ResourceAsColor")
             @Override
@@ -378,13 +378,13 @@ public class OrderTwoActivity extends AppCompatActivity {
 
             // Lay du lieu don hang da dat tai ban so x
             InfoTableAPI infoTableAPI = retrofit.create(InfoTableAPI.class);
-            Call<DinnerTable> dinnerTableCall = infoTableAPI.getTableById(bundle.getLong("idTable"));
+            Call<DinnerTable> dinnerTableCall = infoTableAPI.getTableById(bundle.getLong("idTable"), bundle.getString("token"));
             dinnerTableCall.enqueue(new Callback<DinnerTable>() {
                 @Override
                 public void onResponse(Call<DinnerTable> call, Response<DinnerTable> response) {
                     DishOrderAPI dishOrderAPI = retrofit.create(DishOrderAPI.class);
                     if(response.body().getIdOrder() != 0){
-                        Call<List<DishOrder>> callList = dishOrderAPI.getListDishOrderWithIdOrder(response.body().getIdOrder());
+                        Call<List<DishOrder>> callList = dishOrderAPI.getListDishOrderWithIdOrder(response.body().getIdOrder(), bundle.getString("token"));
                         callList.enqueue(new Callback<List<DishOrder>>() {
                             @Override
                             public void onResponse(Call<List<DishOrder>> call, Response<List<DishOrder>> response) {
@@ -449,7 +449,7 @@ public class OrderTwoActivity extends AppCompatActivity {
                     for(int j = 0; j < lDish.size(); j++){
                         if(quantityAtPosition > 0 && rowListAtt.get(i).getTvNameDish().getText().toString().equals(lDish.get(j).getName())){
                             lDish.get(j).setQuantity(lDish.get(j).getQuantity() - quantityAtPosition);
-                            Call<String> call = dishAPI.putNameAQuantityDish(lDish.get(j).getId(), lDish.get(j));
+                            Call<String> call = dishAPI.putNameAQuantityDish(lDish.get(j).getId(), lDish.get(j), bundle.getString("token"));
                             call.enqueue(new Callback<String>() {
                                 @Override
                                 public void onResponse(Call<String> call, Response<String> response) {
@@ -476,12 +476,12 @@ public class OrderTwoActivity extends AppCompatActivity {
                 order.setState(false);
                 order.setTotalPrice(Double.parseDouble(tv_total_amount.getText().toString()));
 
-                Call<Long> call  = orderAPI.createOrder(order, bundle.getLong("idStaff"),bundle.getLong("idTable"));
+                Call<Long> call  = orderAPI.createOrder(order, bundle.getLong("idStaff"),bundle.getLong("idTable"), bundle.getString("token"));
                 call.enqueue(new Callback<Long>() {
                     @Override
                     public void onResponse(Call<Long> call, Response<Long> response) {
                         InfoTableAPI infoTableAPI = retrofit.create(InfoTableAPI.class);
-                        Call<Void> call1 = infoTableAPI.updateIdOrderForTable(bundle.getLong("idTable"),response.body());
+                        Call<Void> call1 = infoTableAPI.updateIdOrderForTable(bundle.getLong("idTable"),response.body(), bundle.getString("token"));
                         call1.enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {

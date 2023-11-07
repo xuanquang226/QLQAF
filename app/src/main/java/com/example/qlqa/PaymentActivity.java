@@ -64,7 +64,7 @@ public class PaymentActivity extends AppCompatActivity {
 
     public void createDataForAdapter(){
         DishOrderAPI dishOrderAPI = retrofit.create(DishOrderAPI.class);
-        Call<List<DishOrder>> call = dishOrderAPI.getListDishOrderWithIdOrder(bundle.getLong("idOrder"));
+        Call<List<DishOrder>> call = dishOrderAPI.getListDishOrderWithIdOrder(bundle.getLong("idOrder"), bundle.getString("token"));
         call.enqueue(new Callback<List<DishOrder>>() {
             @Override
             public void onResponse(Call<List<DishOrder>> call, Response<List<DishOrder>> response) {
@@ -89,7 +89,7 @@ public class PaymentActivity extends AppCompatActivity {
 
     public void getOrderById(){
         orderAPI = retrofit.create(OrderAPI.class);
-        Call<Order> call = orderAPI.getOrderById(bundle.getLong("idOrder"));
+        Call<Order> call = orderAPI.getOrderById(bundle.getLong("idOrder"), bundle.getString("token"));
         call.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
@@ -100,7 +100,7 @@ public class PaymentActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         order.setState(true);
-                        Call<String> callPutOrder = orderAPI.putOrder(order, bundle.getLong("idOrder"));
+                        Call<String> callPutOrder = orderAPI.putOrder(order, bundle.getLong("idOrder"), bundle.getString("token"));
                         callPutOrder.enqueue(new Callback<String>() {
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
@@ -114,7 +114,7 @@ public class PaymentActivity extends AppCompatActivity {
                         });
 
                         InfoTableAPI infoTableAPI = retrofit.create(InfoTableAPI.class);
-                        Call<Void> callPutIdTable = infoTableAPI.updateIdOrderForTable(bundle.getLong("idTable"), 0);
+                        Call<Void> callPutIdTable = infoTableAPI.updateIdOrderForTable(bundle.getLong("idTable"), 0, bundle.getString("token"));
                         callPutIdTable.enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {

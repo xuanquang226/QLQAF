@@ -82,7 +82,7 @@ public class TimeKeepingActivity extends AppCompatActivity {
 
                 Retrofit retrofit = RetrofitClient.getClient();
                 TimeSheetsAPI timeSheetsAPI = retrofit.create(TimeSheetsAPI.class);
-                Call<Long> call = timeSheetsAPI.postAndGetId(timeSheets);
+                Call<Long> call = timeSheetsAPI.postAndGetId(timeSheets, bundle.getString("token"));
                 call.enqueue(new Callback<Long>() {
                     @Override
                     public void onResponse(Call<Long> call, Response<Long> response) {
@@ -134,7 +134,7 @@ public class TimeKeepingActivity extends AppCompatActivity {
 
             Retrofit retrofit = RetrofitClient.getClient();
             TimeSheetsStaffAPI timeSheetsStaffAPI = retrofit.create(TimeSheetsStaffAPI.class);
-            Call<String> call = timeSheetsStaffAPI.postTimeSheetsStaff(timeSheetsStaff, bundle.getLong("idStaff"));
+            Call<String> call = timeSheetsStaffAPI.postTimeSheetsStaff(timeSheetsStaff, bundle.getLong("idStaff"),bundle.getString("token"));
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
@@ -152,19 +152,19 @@ public class TimeKeepingActivity extends AppCompatActivity {
 
     public void getStaff() {
         StaffAPI staffAPI = retrofit.create(StaffAPI.class);
-        Call<Staff> call = staffAPI.getStaff(bundle.getLong("idS"));
+        Call<Staff> call = staffAPI.getStaff(bundle.getLong("idS"), bundle.getString("token"));
         call.enqueue(new Callback<Staff>() {
             @Override
             public void onResponse(Call<Staff> call, Response<Staff> response) {
                 Staff staff = response.body();
                 bundle.putLong("idStaff", staff.getIdStaff());
 
-                if (staff.getAccount().getTypeAccount()) {
+                if (staff.getAccount().isTypeA()) {
                     btnScanner.setVisibility(View.GONE);
 
 
                     TimeSheetsAPI timeSheetsAPI = retrofit.create(TimeSheetsAPI.class);
-                    Call<TimeSheets> call2 = timeSheetsAPI.getTimeSheetsWithDate();
+                    Call<TimeSheets> call2 = timeSheetsAPI.getTimeSheetsWithDate(bundle.getString("token"));
                     call2.enqueue(new Callback<TimeSheets>() {
                         @Override
                         public void onResponse(Call<TimeSheets> call, Response<TimeSheets> response) {
@@ -196,7 +196,7 @@ public class TimeKeepingActivity extends AppCompatActivity {
                     btnGenerate.setVisibility(View.GONE);
 
                     TimeSheetsStaffAPI timeSheetsStaffAPI = retrofit.create(TimeSheetsStaffAPI.class);
-                    Call<Boolean> call2 = timeSheetsStaffAPI.checkTimeKeeping(response.body().getIdStaff());
+                    Call<Boolean> call2 = timeSheetsStaffAPI.checkTimeKeeping(response.body().getIdStaff(), bundle.getString("token"));
                     call2.enqueue(new Callback<Boolean>() {
                         @Override
                         public void onResponse(Call<Boolean> call, Response<Boolean> response) {

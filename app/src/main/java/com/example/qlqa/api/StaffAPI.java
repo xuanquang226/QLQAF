@@ -4,10 +4,11 @@ import com.example.qlqa.model.Staff;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Path;
 
 public interface StaffAPI {
 
     @GET("/api/staff/{id}")
-    Call<Staff> getStaff(@Path("id") long idAccount);
+    Call<Staff> getStaff(@Path("id") long idAccount, @Header("Authorization") String token);
 }

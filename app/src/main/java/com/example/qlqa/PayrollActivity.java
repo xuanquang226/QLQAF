@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.MenuItem;
@@ -46,10 +47,16 @@ public class PayrollActivity extends AppCompatActivity implements AdapterView.On
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView.ItemDecoration itemDecoration;
 
+    private Intent intent;
+    private Bundle bundle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.payroll_layout);
+
+        intent = getIntent();
+        bundle = intent.getExtras();
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -101,12 +108,12 @@ public class PayrollActivity extends AppCompatActivity implements AdapterView.On
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         payroll.setDateCreatePayroll(timestamp);
 
-        Call<Long> call = payrollAPI.postAndGetIDPayroll(payroll);
+        Call<Long> call = payrollAPI.postAndGetIDPayroll(payroll, bundle.getString("token"));
         call.enqueue(new Callback<Long>() {
             @Override
             public void onResponse(Call<Long> call, Response<Long> response) {
                 PayrollStaffAPI payrollStaffAPI = retrofit.create(PayrollStaffAPI.class);
-                Call<Void> callPayrollStaffAPI = payrollStaffAPI.postPayrollStaff(response.body());
+                Call<Void> callPayrollStaffAPI = payrollStaffAPI.postPayrollStaff(response.body(), bundle.getString("token"));
                 callPayrollStaffAPI.enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
@@ -130,14 +137,14 @@ public class PayrollActivity extends AppCompatActivity implements AdapterView.On
 
     public void getPayrollStaff() {
         PayrollAPI payrollAPI = retrofit.create(PayrollAPI.class);
-        Call<Long> call = payrollAPI.queryPayrollAndGetIdPayroll(month, year);
+        Call<Long> call = payrollAPI.queryPayrollAndGetIdPayroll(month, year, bundle.getString("token"));
         call.enqueue(new Callback<Long>() {
             @Override
             public void onResponse(Call<Long> call, Response<Long> response) {
                 if (response.body() != null) {
 
                     PayrollStaffAPI payrollStaffAPI = retrofit.create(PayrollStaffAPI.class);
-                    Call<List<PayrollStaff>> call1 = payrollStaffAPI.getPayrollStaff(response.body());
+                    Call<List<PayrollStaff>> call1 = payrollStaffAPI.getPayrollStaff(response.body(), bundle.getString("token"));
                     call1.enqueue(new Callback<List<PayrollStaff>>() {
                         @Override
                         public void onResponse(Call<List<PayrollStaff>> call, Response<List<PayrollStaff>> response) {

@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.qlqa.api.LoginAPI;
+import com.example.qlqa.model.TupleAccountToken;
 import com.example.qlqa.utils.RetrofitClient;
 import com.example.qlqa.model.Account;
 
@@ -33,7 +34,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
-
 
 
         // Set title for activity
@@ -60,12 +60,12 @@ public class LoginActivity extends AppCompatActivity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!edt_username.getText().toString().isEmpty() && !edt_password.getText().toString().isEmpty()){
+                if (!edt_username.getText().toString().isEmpty() && !edt_password.getText().toString().isEmpty()) {
                     login(new Account(edt_username.getText().toString().trim(), edt_password.getText().toString().trim()));
-                }else{
+                } else {
                     Toast.makeText(LoginActivity.this, "Ban chua nhap day du thong tin", Toast.LENGTH_SHORT).show();
                 }
-                
+
             }
         });
 
@@ -87,22 +87,31 @@ public class LoginActivity extends AppCompatActivity {
 
     public void login(Account a) {
         LoginAPI accountAPI = retrofit.create(LoginAPI.class);
-        Call<Account> call = accountAPI.login(a);
-        call.enqueue(new Callback<Account>() {
+        Call<TupleAccountToken<String, Account>> call = accountAPI.login(a);
+        call.enqueue(new Callback<TupleAccountToken<String, Account>>() {
             @Override
-            public void onResponse(Call<Account> call, Response<Account> response) {
+            public void onResponse(Call<TupleAccountToken<String, Account>> call, Response<TupleAccountToken<String, Account>> response) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("username",response.body().getUsername());
-                bundle.putString("password", response.body().getPassword());
-                bundle.putBoolean("typeA", response.body().getTypeAccount());
-                bundle.putLong("idS", response.body().getIdS());
-                intent.putExtras(bundle);
-                startActivity(intent);
+
+                if(response.body() != null){
+                    TupleAccountToken<String, Account> accountAndToken = response.body();
+                    bundle.putString("username", accountAndToken.getAccount().getUsername());
+                    bundle.putString("password", accountAndToken.getAccount().getPassword());
+                    bundle.putBoolean("typeA", accountAndToken.getAccount().isTypeA());
+                    bundle.putLong("idS", accountAndToken.getAccount().getId());
+                    bundle.putString("token", accountAndToken.getToken());
+                    String token = accountAndToken.getToken();
+
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(LoginActivity.this, "Sai mật khẩu hoặc password", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
-            public void onFailure(Call<Account> call, Throwable t) {
+            public void onFailure(Call<TupleAccountToken<String, Account>> call, Throwable t) {
                 Log.d("loi", t.toString());
                 Toast.makeText(LoginActivity.this, "Khong ket noi duoc", Toast.LENGTH_SHORT).show();
             }

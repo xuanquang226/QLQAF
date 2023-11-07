@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     public void getStaff(long idAccount) {
         Retrofit retrofit = RetrofitClient.getClient();
         StaffAPI staffAPI = retrofit.create(StaffAPI.class);
-        Call<Staff> call = staffAPI.getStaff(idAccount);
+        Call<Staff> call = staffAPI.getStaff(idAccount, bundle.getString("token"));
         call.enqueue(new Callback<Staff>() {
             @Override
             public void onResponse(Call<Staff> call, Response<Staff> response) {
@@ -170,7 +170,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (typeAccount) {
-                    startActivity(new Intent(MainActivity.this, MenuAdjustment.class));
+                    Intent intent = new Intent(MainActivity.this, MenuAdjustment.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(MainActivity.this, "Tai khoan cua ban khong du dieu kien su dung chuc nang nay", Toast.LENGTH_SHORT).show();
                 }
@@ -182,7 +184,9 @@ public class MainActivity extends AppCompatActivity {
         btnPayroll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, PayrollActivity.class));
+                Intent intent = new Intent(MainActivity.this, PayrollActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
     }

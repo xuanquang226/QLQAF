@@ -28,10 +28,15 @@ import retrofit2.Retrofit;
 public class OrderAcitivity extends AppCompatActivity {
     private TableAdapter tableAdapter;
     List<DinnerTable> llTable;
+    private Bundle bundle;
+    private Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.order_layout);
+
+        intent = getIntent();
+        bundle = intent.getExtras();
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(R.string.list_table);
@@ -65,7 +70,7 @@ public class OrderAcitivity extends AppCompatActivity {
     public void getInfoTable(){
         Retrofit retrofit = RetrofitClient.getClient();
         InfoTableAPI infoTableAPI = retrofit.create(InfoTableAPI.class);
-        Call<List<DinnerTable>> call = infoTableAPI.getInfoTable();
+        Call<List<DinnerTable>> call = infoTableAPI.getInfoTable(bundle.getString("token"));
         call.enqueue(new Callback<List<DinnerTable>>() {
             @Override
             public void onResponse(Call<List<DinnerTable>> call, Response<List<DinnerTable>> response) {
