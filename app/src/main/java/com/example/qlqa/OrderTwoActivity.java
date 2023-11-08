@@ -376,7 +376,7 @@ public class OrderTwoActivity extends AppCompatActivity {
                 }
             });
 
-            // Lay du lieu don hang da dat tai ban so x
+            // Lấy dữ liệu đơn hàng tại bàn số x và đổ lại vào bảng
             InfoTableAPI infoTableAPI = retrofit.create(InfoTableAPI.class);
             Call<DinnerTable> dinnerTableCall = infoTableAPI.getTableById(bundle.getLong("idTable"), bundle.getString("token"));
             dinnerTableCall.enqueue(new Callback<DinnerTable>() {

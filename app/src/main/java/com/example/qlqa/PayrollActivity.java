@@ -141,7 +141,7 @@ public class PayrollActivity extends AppCompatActivity implements AdapterView.On
         call.enqueue(new Callback<Long>() {
             @Override
             public void onResponse(Call<Long> call, Response<Long> response) {
-                if (response.body() != null) {
+                if (response.body() != 0) {
 
                     PayrollStaffAPI payrollStaffAPI = retrofit.create(PayrollStaffAPI.class);
                     Call<List<PayrollStaff>> call1 = payrollStaffAPI.getPayrollStaff(response.body(), bundle.getString("token"));
@@ -203,12 +203,32 @@ public class PayrollActivity extends AppCompatActivity implements AdapterView.On
         // Kiểm tra hôm nay có phải ngày cuối cùng của tháng
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         int currentDay = timestamp.getDate();
+        int currentMonth = timestamp.getMonth() + 1;
+        int currentYear = timestamp.getYear() + 1900;
         LocalDate localDate = LocalDate.parse(timestamp.toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")).with(TemporalAdjusters.lastDayOfMonth());
         int lastDayOfMonth = localDate.getDayOfMonth();
 
         if (currentDay == lastDayOfMonth) {
-            Toast.makeText(this, "Nay la ngay cuối cùng của tháng", Toast.LENGTH_SHORT).show();
-            postAndGetIDPayroll();
+            PayrollAPI payrollAPI = retrofit.create(PayrollAPI.class);
+            Call<Boolean> call = payrollAPI.checkPayrollExist(currentMonth, currentYear, bundle.getString("token"));
+            call.enqueue(new Callback<Boolean>() {
+                @Override
+                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    // Bảng lương chưa được tạo
+                    if(response.body() == false){
+                        Toast.makeText(PayrollActivity.this, "Hôm nay là ngày cuối cùng của tháng", Toast.LENGTH_SHORT).show();
+                        postAndGetIDPayroll();
+                    }else{
+                        Toast.makeText(PayrollActivity.this, "Bảng lương tháng này đã được tạo", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Boolean> call, Throwable t) {
+
+                }
+            });
+            
         } else {
             System.out.println("Khong phai ngay cuoi cung");
         }
