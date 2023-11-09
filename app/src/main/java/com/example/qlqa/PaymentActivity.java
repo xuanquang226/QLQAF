@@ -39,6 +39,7 @@ public class PaymentActivity extends AppCompatActivity {
     private Button btnPayment;
     private Intent intent;
     private OrderAPI orderAPI;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,22 +63,27 @@ public class PaymentActivity extends AppCompatActivity {
 
     }
 
-    public void createDataForAdapter(){
+    public void createDataForAdapter() {
         DishOrderAPI dishOrderAPI = retrofit.create(DishOrderAPI.class);
         Call<List<DishOrder>> call = dishOrderAPI.getListDishOrderWithIdOrder(bundle.getLong("idOrder"), bundle.getString("token"));
         call.enqueue(new Callback<List<DishOrder>>() {
             @Override
             public void onResponse(Call<List<DishOrder>> call, Response<List<DishOrder>> response) {
-                PaymentAdapter paymentAdapter = new PaymentAdapter(getApplicationContext());
-                paymentAdapter.setDishOrderList(response.body());
+                if (response.body() != null) {
+                    PaymentAdapter paymentAdapter = new PaymentAdapter(getApplicationContext());
+                    paymentAdapter.setDishOrderList(response.body());
 
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
 
-                RecyclerView recyclerView = findViewById(R.id.rcv_dish_order);
-                RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
-                recyclerView.setAdapter(paymentAdapter);
-                recyclerView.setLayoutManager(linearLayoutManager);
-                recyclerView.addItemDecoration(itemDecoration);
+                    RecyclerView recyclerView = findViewById(R.id.rcv_dish_order);
+                    RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
+                    recyclerView.setAdapter(paymentAdapter);
+                    recyclerView.setLayoutManager(linearLayoutManager);
+                    recyclerView.addItemDecoration(itemDecoration);
+                } else {
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                }
+
             }
 
             @Override
@@ -87,51 +93,57 @@ public class PaymentActivity extends AppCompatActivity {
         });
     }
 
-    public void getOrderById(){
+    public void getOrderById() {
         orderAPI = retrofit.create(OrderAPI.class);
         Call<Order> call = orderAPI.getOrderById(bundle.getLong("idOrder"), bundle.getString("token"));
         call.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
-                Order order = response.body();
-                tvTotalPrice.setText(String.valueOf(order.getTotalPrice()));
+                if (response.body() != null) {
+                    Order order = response.body();
+                    tvTotalPrice.setText(String.valueOf(order.getTotalPrice()));
 
-                btnPayment.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        order.setState(true);
-                        Call<String> callPutOrder = orderAPI.putOrder(order, bundle.getLong("idOrder"), bundle.getString("token"));
-                        callPutOrder.enqueue(new Callback<String>() {
-                            @Override
-                            public void onResponse(Call<String> call, Response<String> response) {
-                                Toast.makeText(PaymentActivity.this, response.body(), Toast.LENGTH_SHORT).show();
-                            }
+                    btnPayment.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            order.setState(true);
+                            Call<String> callPutOrder = orderAPI.putOrder(order, bundle.getLong("idOrder"), bundle.getString("token"));
+                            Toast.makeText(PaymentActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
+                            callPutOrder.enqueue(new Callback<String>() {
+                                @Override
+                                public void onResponse(Call<String> call, Response<String> response) {
+                                    if (response.body() == null) {
+                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                    }
+                                }
 
-                            @Override
-                            public void onFailure(Call<String> call, Throwable t) {
+                                @Override
+                                public void onFailure(Call<String> call, Throwable t) {
 
-                            }
-                        });
+                                }
+                            });
 
-                        InfoTableAPI infoTableAPI = retrofit.create(InfoTableAPI.class);
-                        Call<Void> callPutIdTable = infoTableAPI.updateIdOrderForTable(bundle.getLong("idTable"), 0, bundle.getString("token"));
-                        callPutIdTable.enqueue(new Callback<Void>() {
-                            @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
+                            InfoTableAPI infoTableAPI = retrofit.create(InfoTableAPI.class);
+                            Call<Void> callPutIdTable = infoTableAPI.updateIdOrderForTable(bundle.getLong("idTable"), 0, bundle.getString("token"));
+                            callPutIdTable.enqueue(new Callback<Void>() {
+                                @Override
+                                public void onResponse(Call<Void> call, Response<Void> response) {
 
-                            }
+                                }
 
-                            @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
+                                @Override
+                                public void onFailure(Call<Void> call, Throwable t) {
 
-                            }
-                        });
-                        Toast.makeText(PaymentActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
-                        intent = new Intent(getApplicationContext(), MainActivity.class);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                    }
-                });
+                                }
+                            });
+
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        }
+                    });
+                } else {
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                }
+
             }
 
             @Override
@@ -143,7 +155,7 @@ public class PaymentActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
         }

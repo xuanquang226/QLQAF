@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 import com.example.qlqa.adapter.TableAdapter;
@@ -30,13 +31,16 @@ public class OrderAcitivity extends AppCompatActivity {
     List<DinnerTable> llTable;
     private Bundle bundle;
     private Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.order_layout);
 
+
         intent = getIntent();
         bundle = intent.getExtras();
+
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(R.string.list_table);
@@ -49,7 +53,7 @@ public class OrderAcitivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -67,33 +71,36 @@ public class OrderAcitivity extends AppCompatActivity {
 //        return llTable;
 //    }
 
-    public void getInfoTable(){
+    public void getInfoTable() {
         Retrofit retrofit = RetrofitClient.getClient();
         InfoTableAPI infoTableAPI = retrofit.create(InfoTableAPI.class);
         Call<List<DinnerTable>> call = infoTableAPI.getInfoTable(bundle.getString("token"));
         call.enqueue(new Callback<List<DinnerTable>>() {
             @Override
             public void onResponse(Call<List<DinnerTable>> call, Response<List<DinnerTable>> response) {
+                if (response.body() != null) {
                 tableAdapter = new TableAdapter(getApplicationContext(), new TableAdapter.ItemClickListener() {
                     @Override
                     public void onItemClick(DinnerTable dinnerTable) {
-                        Intent intent = getIntent();
-                        Bundle bundle = intent.getExtras();
+                        bundle = intent.getExtras();
                         bundle.putLong("idTable", dinnerTable.getId());
                         Intent intent2 = new Intent(OrderAcitivity.this, OrderTwoActivity.class);
                         intent2.putExtras(bundle);
                         startActivity(intent2);
                     }
                 });
-                tableAdapter.setData(response.body());
 
-                RecyclerView recyclerView = findViewById(R.id.rcv_ltb);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(OrderAcitivity.this, LinearLayoutManager.VERTICAL, false);
+                    tableAdapter.setData(response.body());
+                    RecyclerView recyclerView = findViewById(R.id.rcv_ltb);
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(OrderAcitivity.this, LinearLayoutManager.VERTICAL, false);
 
-                recyclerView.setLayoutManager(layoutManager);
-                recyclerView.setAdapter(tableAdapter);
-                RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
-                recyclerView.addItemDecoration(itemDecoration);
+                    recyclerView.setLayoutManager(layoutManager);
+                    recyclerView.setAdapter(tableAdapter);
+                    RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
+                    recyclerView.addItemDecoration(itemDecoration);
+                }else{
+                    startActivity(new Intent(OrderAcitivity.this, MainActivity.class));
+                }
 
             }
 
@@ -103,5 +110,4 @@ public class OrderAcitivity extends AppCompatActivity {
             }
         });
     }
-
 }

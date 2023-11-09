@@ -112,143 +112,148 @@ public class OrderTwoActivity extends AppCompatActivity {
             @SuppressLint("ResourceAsColor")
             @Override
             public void onResponse(Call<List<com.example.qlqa.model.Dish>> call, Response<List<com.example.qlqa.model.Dish>> response) {
-                nameDish = new ArrayList<>();
-                for (com.example.qlqa.model.Dish dish : response.body()) {
-                    nameDish.add(dish.getName());
-                }
-
-
-                Window window = dialoga.getWindow();
-                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-
-                WindowManager.LayoutParams windowAtt = window.getAttributes();
-                windowAtt.gravity = Gravity.CENTER;
-                window.setAttributes(windowAtt);
-
-                ListView listViewName = (ListView) dialoga.findViewById(R.id.lv_name_dish);
-                arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, nameDish);
-                listViewName.setAdapter(arrayAdapter);
-
-                edt_search.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialoga.show();
-                    }
-                });
-
-
-                // Create table layout
-                tableLayout = (TableLayout) findViewById(R.id.tl_nameDish);
-
-                // Table row 1
-                tableRow1 = new TableRow(getApplicationContext());
-                tableRow1.setBackgroundColor(getColor(R.color.moderate_blue));
-                tableRow1.setDividerDrawable(getDrawable(R.color.black));
-                tableRow1.setShowDividers(TableRow.SHOW_DIVIDER_MIDDLE);
-                tableRow1.setGravity(Gravity.CENTER);
-
-
-                tv1 = new TextView(getApplicationContext());
-                tv1.setText(R.string.list_dish);
-                tv1.setTextColor(getColor(R.color.white_b));
-                tv1.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                tv1.setGravity(Gravity.CENTER);
-                tableRow1.addView(tv1, new TableRow.LayoutParams(1, TableRow.LayoutParams.WRAP_CONTENT));
-
-
-                tv2 = new TextView(getApplicationContext());
-                tv2.setText(R.string.quantity);
-                tv2.setTextColor(getColor(R.color.white_b));
-                tv2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                tv2.setGravity(Gravity.CENTER);
-                tableRow1.addView(tv2, new TableRow.LayoutParams(1, TableRow.LayoutParams.WRAP_CONTENT));
-
-                tv3 = new TextView(getApplicationContext());
-                tv3.setText(R.string.into_money);
-                tv3.setTextColor(getColor(R.color.white_b));
-                tv3.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                tv3.setGravity(Gravity.CENTER);
-                tableRow1.addView(tv3, new TableRow.LayoutParams(1, TableRow.LayoutParams.WRAP_CONTENT));
-
-                tv4 = new TextView(getApplicationContext());
-                tv4.setText(R.string.note);
-                tv4.setTextColor(getColor(R.color.white_b));
-                tv4.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                tv4.setGravity(Gravity.CENTER);
-                tableRow1.addView(tv4, new TableRow.LayoutParams(1, TableRow.LayoutParams.WRAP_CONTENT));
-
-                tableLayout.addView(tableRow1);
-
-                // Table row 2
-                ntableRow = new TableRow(getApplicationContext());
-                for (int i = 0; i < nameDish.size(); i++) {
-                    if ((i % 2) == 0) {
-                        ntableRow.setBackgroundColor(getColor(R.color.light_blue));
-                    } else {
-                        ntableRow.setBackgroundColor(getColor(R.color.back_ground));
+                if(response.body() != null) {
+                    nameDish = new ArrayList<>();
+                    for (com.example.qlqa.model.Dish dish : response.body()) {
+                        nameDish.add(dish.getName());
                     }
 
+
+                    Window window = dialoga.getWindow();
+                    window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                    window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+
+                    WindowManager.LayoutParams windowAtt = window.getAttributes();
+                    windowAtt.gravity = Gravity.CENTER;
+                    window.setAttributes(windowAtt);
+
+                    ListView listViewName = (ListView) dialoga.findViewById(R.id.lv_name_dish);
+                    arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, nameDish);
+                    listViewName.setAdapter(arrayAdapter);
+
+                    edt_search.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialoga.show();
+                        }
+                    });
+
+
+                    // Create table layout
+                    tableLayout = (TableLayout) findViewById(R.id.tl_nameDish);
+
+                    // Table row 1
+                    tableRow1 = new TableRow(getApplicationContext());
+                    tableRow1.setBackgroundColor(getColor(R.color.moderate_blue));
+                    tableRow1.setDividerDrawable(getDrawable(R.color.black));
+                    tableRow1.setShowDividers(TableRow.SHOW_DIVIDER_MIDDLE);
+                    tableRow1.setGravity(Gravity.CENTER);
+
+
+                    tv1 = new TextView(getApplicationContext());
+                    tv1.setText(R.string.list_dish);
+                    tv1.setTextColor(getColor(R.color.white_b));
+                    tv1.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                    tv1.setGravity(Gravity.CENTER);
+                    tableRow1.addView(tv1, new TableRow.LayoutParams(1, TableRow.LayoutParams.WRAP_CONTENT));
+
+
+                    tv2 = new TextView(getApplicationContext());
+                    tv2.setText(R.string.quantity);
+                    tv2.setTextColor(getColor(R.color.white_b));
+                    tv2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                    tv2.setGravity(Gravity.CENTER);
+                    tableRow1.addView(tv2, new TableRow.LayoutParams(1, TableRow.LayoutParams.WRAP_CONTENT));
+
+                    tv3 = new TextView(getApplicationContext());
+                    tv3.setText(R.string.into_money);
+                    tv3.setTextColor(getColor(R.color.white_b));
+                    tv3.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                    tv3.setGravity(Gravity.CENTER);
+                    tableRow1.addView(tv3, new TableRow.LayoutParams(1, TableRow.LayoutParams.WRAP_CONTENT));
+
+                    tv4 = new TextView(getApplicationContext());
+                    tv4.setText(R.string.note);
+                    tv4.setTextColor(getColor(R.color.white_b));
+                    tv4.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                    tv4.setGravity(Gravity.CENTER);
+                    tableRow1.addView(tv4, new TableRow.LayoutParams(1, TableRow.LayoutParams.WRAP_CONTENT));
+
+                    tableLayout.addView(tableRow1);
+
+                    // Table row 2
                     ntableRow = new TableRow(getApplicationContext());
-                    ntableRow.setDividerDrawable(getDrawable(R.color.black));
-                    ntableRow.setShowDividers(TableRow.SHOW_DIVIDER_MIDDLE);
+                    for (int i = 0; i < nameDish.size(); i++) {
+                        if ((i % 2) == 0) {
+                            ntableRow.setBackgroundColor(getColor(R.color.light_blue));
+                        } else {
+                            ntableRow.setBackgroundColor(getColor(R.color.back_ground));
+                        }
+
+                        ntableRow = new TableRow(getApplicationContext());
+                        ntableRow.setDividerDrawable(getDrawable(R.color.black));
+                        ntableRow.setShowDividers(TableRow.SHOW_DIVIDER_MIDDLE);
 
 
-                    //Column 1
-                    tv5 = new TextView(getApplicationContext());
-                    tv5.setText(response.body().get(i).getName());
-                    tv5.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
-                    tv5.setTextColor(getColor(R.color.black));
-                    tv5.setGravity(Gravity.CENTER);
-                    //tv5.setPadding(2,2,2,2);
-                    ntableRow.addView(tv5, new TableRow.LayoutParams(1, 150));
+                        //Column 1
+                        tv5 = new TextView(getApplicationContext());
+                        tv5.setText(response.body().get(i).getName());
+                        tv5.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
+                        tv5.setTextColor(getColor(R.color.black));
+                        tv5.setGravity(Gravity.CENTER);
+                        //tv5.setPadding(2,2,2,2);
+                        ntableRow.addView(tv5, new TableRow.LayoutParams(1, 150));
 
 
-                    // Column 2
-                    imgButton = new ImageButton(getApplicationContext());
-                    imgButton.setId(R.id.imgButton);
-                    imgButton.setImageResource(R.drawable.baseline_remove_24);
-                    imgButton.setBackground(getDrawable(R.drawable.img_button_color));
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(50, 50);
-                    params.setMarginEnd(15);
-                    imgButton.setLayoutParams(params);
+                        // Column 2
+                        imgButton = new ImageButton(getApplicationContext());
+                        imgButton.setId(R.id.imgButton);
+                        imgButton.setImageResource(R.drawable.baseline_remove_24);
+                        imgButton.setBackground(getDrawable(R.drawable.img_button_color));
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(50, 50);
+                        params.setMarginEnd(15);
+                        imgButton.setLayoutParams(params);
 
-                    tv6 = new TextView(getApplicationContext());
-                    tv6.setText("0");
-                    tv6.setTextColor(getColor(R.color.black));
+                        tv6 = new TextView(getApplicationContext());
+                        tv6.setText("0");
+                        tv6.setTextColor(getColor(R.color.black));
 
-                    imgButton2 = new ImageButton(getApplicationContext());
-                    imgButton2.setId(R.id.imgButton2);
-                    imgButton2.setImageResource(R.drawable.baseline_add_24);
-                    imgButton2.setBackground(getDrawable(R.drawable.img_button_color));
-                    LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(50, 50);
-                    params1.setMarginStart(15);
-                    imgButton2.setLayoutParams(params1);
+                        imgButton2 = new ImageButton(getApplicationContext());
+                        imgButton2.setId(R.id.imgButton2);
+                        imgButton2.setImageResource(R.drawable.baseline_add_24);
+                        imgButton2.setBackground(getDrawable(R.drawable.img_button_color));
+                        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(50, 50);
+                        params1.setMarginStart(15);
+                        imgButton2.setLayoutParams(params1);
 
-                    LinearLayout linearLayout = new LinearLayout(getApplicationContext());
-                    linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-                    linearLayout.setGravity(Gravity.CENTER);
-                    linearLayout.addView(imgButton);
-                    linearLayout.addView(tv6);
-                    linearLayout.addView(imgButton2);
-                    ntableRow.addView(linearLayout, new TableRow.LayoutParams(1, 150));
-
-
-                    // Column 3
-                    tv7 = new TextView(getApplicationContext());
-                    tv7.setText("0.0");
-                    tv7.setGravity(Gravity.CENTER);
-                    ntableRow.addView(tv7, new TableRow.LayoutParams(1, TableRow.LayoutParams.WRAP_CONTENT));
+                        LinearLayout linearLayout = new LinearLayout(getApplicationContext());
+                        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+                        linearLayout.setGravity(Gravity.CENTER);
+                        linearLayout.addView(imgButton);
+                        linearLayout.addView(tv6);
+                        linearLayout.addView(imgButton2);
+                        ntableRow.addView(linearLayout, new TableRow.LayoutParams(1, 150));
 
 
-                    // Column 4
-                    tv8 = new TextView(getApplicationContext());
-                    tv8.setText("Nhấn");
-                    tv8.setGravity(Gravity.CENTER);
-                    ntableRow.addView(tv8, new TableRow.LayoutParams(1, TableRow.LayoutParams.WRAP_CONTENT));
-                    tableLayout.addView(ntableRow);
+                        // Column 3
+                        tv7 = new TextView(getApplicationContext());
+                        tv7.setText("0.0");
+                        tv7.setGravity(Gravity.CENTER);
+                        ntableRow.addView(tv7, new TableRow.LayoutParams(1, TableRow.LayoutParams.WRAP_CONTENT));
+
+
+                        // Column 4
+                        tv8 = new TextView(getApplicationContext());
+                        tv8.setText("Nhấn");
+                        tv8.setGravity(Gravity.CENTER);
+                        ntableRow.addView(tv8, new TableRow.LayoutParams(1, TableRow.LayoutParams.WRAP_CONTENT));
+                        tableLayout.addView(ntableRow);
+                    }
+                    handle(0, response);
+                }else{
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 }
-                handle(0, response);
+
             }
 
             @Override
@@ -383,36 +388,40 @@ public class OrderTwoActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<DinnerTable> call, Response<DinnerTable> response) {
                     DishOrderAPI dishOrderAPI = retrofit.create(DishOrderAPI.class);
-                    if(response.body().getIdOrder() != 0){
-                        Call<List<DishOrder>> callList = dishOrderAPI.getListDishOrderWithIdOrder(response.body().getIdOrder(), bundle.getString("token"));
-                        callList.enqueue(new Callback<List<DishOrder>>() {
-                            @Override
-                            public void onResponse(Call<List<DishOrder>> call, Response<List<DishOrder>> response) {
-                                double price = 0.0;
-                                List<DishOrder> dishOrderList = response.body();
-                                for(int i = 0; i < dishList.size(); i++){
-                                    for(int j = 0; j < dishOrderList.size(); j++){
-                                        if(dishOrderList.get(j).getName().equalsIgnoreCase(dishList.get(i).getName())){
-                                            rowListAtt.get(i).getTvQuantity().setText(String.valueOf(dishOrderList.get(j).getQuantity()));
-                                            if(!dishOrderList.get(j).getNote().isEmpty()){
-                                                rowListAtt.get(i).getTvNote().setText(dishOrderList.get(j).getNote());
-                                            }else{
-                                                rowListAtt.get(i).getTvNote().setText("Nhấn");
-                                            }
-                                            rowListAtt.get(i).getTvPrice().setText(String.valueOf(dishOrderList.get(j).getPrice()));
+                    if(response.body() != null){
+                        if (response.body().getIdOrder() != 0) {
+                            Call<List<DishOrder>> callList = dishOrderAPI.getListDishOrderWithIdOrder(response.body().getIdOrder(), bundle.getString("token"));
+                            callList.enqueue(new Callback<List<DishOrder>>() {
+                                @Override
+                                public void onResponse(Call<List<DishOrder>> call, Response<List<DishOrder>> response) {
+                                    double price = 0.0;
+                                    List<DishOrder> dishOrderList = response.body();
+                                    for (int i = 0; i < dishList.size(); i++) {
+                                        for (int j = 0; j < dishOrderList.size(); j++) {
+                                            if (dishOrderList.get(j).getName().equalsIgnoreCase(dishList.get(i).getName())) {
+                                                rowListAtt.get(i).getTvQuantity().setText(String.valueOf(dishOrderList.get(j).getQuantity()));
+                                                if (!dishOrderList.get(j).getNote().isEmpty()) {
+                                                    rowListAtt.get(i).getTvNote().setText(dishOrderList.get(j).getNote());
+                                                } else {
+                                                    rowListAtt.get(i).getTvNote().setText("Nhấn");
+                                                }
+                                                rowListAtt.get(i).getTvPrice().setText(String.valueOf(dishOrderList.get(j).getPrice()));
 
-                                            price += dishOrderList.get(j).getPrice();
+                                                price += dishOrderList.get(j).getPrice();
+                                            }
                                         }
                                     }
+                                    tv_total_amount.setText(String.valueOf(price));
                                 }
-                                tv_total_amount.setText(String.valueOf(price));
-                            }
 
-                            @Override
-                            public void onFailure(Call<List<DishOrder>> call, Throwable t) {
+                                @Override
+                                public void onFailure(Call<List<DishOrder>> call, Throwable t) {
 
-                            }
-                        });
+                                }
+                            });
+                        }
+                    } else {
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     }
                 }
 
@@ -427,6 +436,7 @@ public class OrderTwoActivity extends AppCompatActivity {
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             OrderAPI orderAPI = retrofit.create(OrderAPI.class);
             DishAPI dishAPI = retrofit.create(DishAPI.class);
+
             @Override
             public void onClick(View view) {
                 Set<DishOrder> dishSet = new HashSet<>();
@@ -438,22 +448,24 @@ public class OrderTwoActivity extends AppCompatActivity {
                         dishOrder.setName(rowListAtt.get(i).getTvNameDish().getText().toString());
                         dishOrder.setPrice(Double.parseDouble(rowListAtt.get(i).getTvPrice().getText().toString()));
                         dishOrder.setQuantity(Integer.parseInt(rowListAtt.get(i).getTvQuantity().getText().toString()));
-                        if(!rowListAtt.get(i).getTvNote().getText().toString().isEmpty() && !rowListAtt.get(i).getTvNote().getText().toString().equals("Nhấn")) {
+                        if (!rowListAtt.get(i).getTvNote().getText().toString().isEmpty() && !rowListAtt.get(i).getTvNote().getText().toString().equals("Nhấn")) {
                             dishOrder.setNote(rowListAtt.get(i).getTvNote().getText().toString());
-                        }else{
+                        } else {
                             dishOrder.setNote("");
                         }
                         dishSet.add(dishOrder);
                     }
                     // Quantity Decrease
-                    for(int j = 0; j < lDish.size(); j++){
-                        if(quantityAtPosition > 0 && rowListAtt.get(i).getTvNameDish().getText().toString().equals(lDish.get(j).getName())){
+                    for (int j = 0; j < lDish.size(); j++) {
+                        if (quantityAtPosition > 0 && rowListAtt.get(i).getTvNameDish().getText().toString().equals(lDish.get(j).getName())) {
                             lDish.get(j).setQuantity(lDish.get(j).getQuantity() - quantityAtPosition);
                             Call<String> call = dishAPI.putNameAQuantityDish(lDish.get(j).getId(), lDish.get(j), bundle.getString("token"));
                             call.enqueue(new Callback<String>() {
                                 @Override
                                 public void onResponse(Call<String> call, Response<String> response) {
-
+                                    if (response.body() == null) {
+                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                    }
                                 }
 
                                 @Override
@@ -476,23 +488,28 @@ public class OrderTwoActivity extends AppCompatActivity {
                 order.setState(false);
                 order.setTotalPrice(Double.parseDouble(tv_total_amount.getText().toString()));
 
-                Call<Long> call  = orderAPI.createOrder(order, bundle.getLong("idStaff"),bundle.getLong("idTable"), bundle.getString("token"));
+                Call<Long> call = orderAPI.createOrder(order, bundle.getLong("idStaff"), bundle.getLong("idTable"), bundle.getString("token"));
                 call.enqueue(new Callback<Long>() {
                     @Override
                     public void onResponse(Call<Long> call, Response<Long> response) {
-                        InfoTableAPI infoTableAPI = retrofit.create(InfoTableAPI.class);
-                        Call<Void> call1 = infoTableAPI.updateIdOrderForTable(bundle.getLong("idTable"),response.body(), bundle.getString("token"));
-                        call1.enqueue(new Callback<Void>() {
-                            @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
 
-                            }
+                        if (response.body() != null) {
+                            InfoTableAPI infoTableAPI = retrofit.create(InfoTableAPI.class);
+                            Call<Void> call1 = infoTableAPI.updateIdOrderForTable(bundle.getLong("idTable"), response.body(), bundle.getString("token"));
+                            call1.enqueue(new Callback<Void>() {
+                                @Override
+                                public void onResponse(Call<Void> call, Response<Void> response) {
 
-                            @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
+                                }
 
-                            }
-                        });
+                                @Override
+                                public void onFailure(Call<Void> call, Throwable t) {
+
+                                }
+                            });
+                        } else {
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        }
                     }
 
                     @Override
@@ -501,9 +518,7 @@ public class OrderTwoActivity extends AppCompatActivity {
                     }
                 });
                 Toast.makeText(OrderTwoActivity.this, "Đặt món thành công", Toast.LENGTH_SHORT).show();
-                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
-                intent1.putExtras(bundle);
-                startActivity(intent1);
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
     }

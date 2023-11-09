@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private Retrofit retrofit;
     private SQLiteDatabase database;
 
+    private int idToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         transMenuAdjustActivity();
         transPayrollActivity();
 
-        database();
+        localDatabase();
 
 
         // Logout
@@ -99,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                         Toast.makeText(MainActivity.this, "Logout", Toast.LENGTH_SHORT).show();
+                        database.delete("Auth", "idToken = ?", new String[]{Integer.toString(idToken)});
+
                         return true;
                     case R.id.itemExit:
                         Toast.makeText(MainActivity.this, "Exit", Toast.LENGTH_SHORT).show();
@@ -214,35 +217,52 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-     //Lưu authorization lần sau vào app thì nó tải account về lưu dô bundle
 
-    public void database(){
+    public void localDatabase(){
+        String token;
+
         database = openOrCreateDatabase("Authorization.db", MODE_PRIVATE, null);
         try{
-            String sql = "CREATE TABLE Auth(token TEXT)";
+            String sql = "CREATE TABLE Auth(idToken INT, token TEXT)";
             database.execSQL(sql);
         }catch(Exception e){
             Log.e("Error", "Table was exist");
         }
+
 //        ContentValues values = new ContentValues();
+//        values.put("idToken", 1);
 //        values.put("token", bundle.getString("token"));
 //        database.insert("Auth", null, values);
 
+        // Duyệt table Auth nếu tồn tại jwt thì lấy ra gán vào biến String token để getAccount, không có dữ liệu thì insert rồi duyệt lại và gán vào String token.
         Cursor c = database.query("Auth", null, null, null, null, null, null);
-        c.moveToFirst();
-        String token = c.getString(0);
+
+        if(c.moveToFirst()){
+            token = c.getString(1);
+            idToken = c.getInt(0);
+        }else{
+            ContentValues values = new ContentValues();
+            values.put("idToken", 1);
+            values.put("token", bundle.getString("token"));
+            database.insert("Auth", null, values);
+
+            Cursor c1 = database.query("Auth", null, null, null, null, null, null);
+            c1.moveToFirst();
+            token = c1.getString(1);
+            idToken = c1.getInt(0);
+        }
+        getAccount(token, idToken);
 //        try {
 //            String sql = "Drop TABLE Auth";
 //            database.execSQL(sql);
 //        }catch(Exception e){
 //            e.printStackTrace();;
 //        }
-        getAccount(token);
+
     }
 
-    public void getAccount(String token){
+    public void getAccount(String token, int idToken){
         System.out.println(token);
-        //System.out.println(bundle.getString("token"));
 
         LoginAPI loginAPI = retrofit.create(LoginAPI.class);
         Call<Account> call = loginAPI.getAccount(token);
@@ -251,12 +271,18 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<Account> call, Response<Account> response) {
 //                bundle.putString("username", response.body().getUsername());
 //                bundle.putString("password", response.body().getPassword());
+                if(response.body() != null) {
+                    bundle.putLong("idS", response.body().getId());
+                    bundle.putString("token", token);
+                    typeAccount = response.body().isTypeA();
+                    getStaff(response.body().getId(), token);
+                }else{
+                    // Token hết hạn, xoá token trong sqlite và chuyển về màn hình đăng nhập
+                    database.delete("Auth", "idToken = ?", new String[]{Integer.toString(idToken)});
 
-                bundle.putLong("idS", response.body().getId());
-                bundle.putString("token", token);
-                typeAccount = response.body().isTypeA();
-                getStaff(response.body().getId(), token);
-
+                    Toast.makeText(MainActivity.this, "Hết hạn đăng nhập bạn cần đăng nhập lại", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(MainActivity.this, IntroduceActivity.class));
+                };
             }
 
             @Override

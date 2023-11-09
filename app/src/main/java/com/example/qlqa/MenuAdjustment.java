@@ -47,8 +47,10 @@ public class MenuAdjustment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_adjustment_layout);
 
+
         intent = getIntent();
         bundle = intent.getExtras();
+
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Sửa món");
@@ -64,7 +66,6 @@ public class MenuAdjustment extends AppCompatActivity {
     public void getDish(){
 
         Call<List<com.example.qlqa.model.Dish>> call = dishAPI.getListDish(bundle.getString("token"));
-
         Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_edit_dish_layout);
@@ -106,7 +107,9 @@ public class MenuAdjustment extends AppCompatActivity {
                                 call1.enqueue(new Callback<String>() {
                                     @Override
                                     public void onResponse(Call<String> call, Response<String> response) {
-
+                                        if(response.body() == null){
+                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                        }
                                     }
 
                                     @Override
@@ -128,8 +131,11 @@ public class MenuAdjustment extends AppCompatActivity {
                                 call.enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
-                                        Toast.makeText(MenuAdjustment.this, "Món "+ dish.getName() + " đã bị xoá", Toast.LENGTH_SHORT).show();
-
+                                        if(response.body() == null){
+                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                        }else{
+                                            Toast.makeText(MenuAdjustment.this, "Món "+ dish.getName() + " đã bị xoá", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
 
                                     @Override
@@ -149,16 +155,18 @@ public class MenuAdjustment extends AppCompatActivity {
 
                     }
                 });
-                dishAdapter.setData(response.body());
-                RecyclerView rcvDish = (RecyclerView) findViewById(R.id.rcv_list_dish);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MenuAdjustment.this, LinearLayoutManager.VERTICAL, false);
-                rcvDish.setLayoutManager(linearLayoutManager);
-                rcvDish.setAdapter(dishAdapter);
+                if(response.body() == null){
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                }else{
+                    dishAdapter.setData(response.body());
+                    RecyclerView rcvDish = (RecyclerView) findViewById(R.id.rcv_list_dish);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MenuAdjustment.this, LinearLayoutManager.VERTICAL, false);
+                    rcvDish.setLayoutManager(linearLayoutManager);
+                    rcvDish.setAdapter(dishAdapter);
 
-                RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
-                rcvDish.addItemDecoration(itemDecoration);
-
-
+                    RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
+                    rcvDish.addItemDecoration(itemDecoration);
+                }
             }
 
             @Override
