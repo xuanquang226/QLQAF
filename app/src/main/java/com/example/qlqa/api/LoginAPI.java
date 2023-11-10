@@ -11,7 +11,7 @@ import retrofit2.http.POST;
 
 public interface LoginAPI {
 
-    @POST("/api/login2")
+    @POST("/api/login")
     Call<TupleAccountToken<String,Account>> login(@Body Account a);
 
     @POST("/api/get")
