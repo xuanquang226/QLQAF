@@ -87,22 +87,19 @@ public class LoginActivity extends AppCompatActivity {
 
     public void login(Account a) {
         LoginAPI accountAPI = retrofit.create(LoginAPI.class);
-        Call<TupleAccountToken<String, Account>> call = accountAPI.login(a);
-        call.enqueue(new Callback<TupleAccountToken<String, Account>>() {
+        Call<TupleAccountToken<String,Account>> call = accountAPI.login(a);
+        call.enqueue(new Callback<TupleAccountToken<String,Account>>() {
             @Override
-            public void onResponse(Call<TupleAccountToken<String, Account>> call, Response<TupleAccountToken<String, Account>> response) {
+            public void onResponse(Call<TupleAccountToken<String,Account>> call, Response<TupleAccountToken<String,Account>> response) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 Bundle bundle = new Bundle();
 
                 if(response.body() != null){
-                    TupleAccountToken<String, Account> accountAndToken = response.body();
-                    bundle.putString("username", accountAndToken.getAccount().getUsername());
-                    bundle.putString("password", accountAndToken.getAccount().getPassword());
-                    bundle.putBoolean("typeA", accountAndToken.getAccount().isTypeA());
-                    bundle.putLong("idS", accountAndToken.getAccount().getId());
-                    bundle.putString("token", accountAndToken.getToken());
-                    String token = accountAndToken.getToken();
-
+//                    bundle.putString("username", accountAndToken.getAccount().getUsername());
+//                    bundle.putString("password", accountAndToken.getAccount().getPassword());
+//                    bundle.putBoolean("typeA", accountAndToken.getAccount().isTypeA());
+//                    bundle.putLong("idS", accountAndToken.getAccount().getId());
+                    bundle.putString("token", response.body().getToken());
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }else{
@@ -111,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<TupleAccountToken<String, Account>> call, Throwable t) {
+            public void onFailure(Call<TupleAccountToken<String,Account>> call, Throwable t) {
                 Log.d("loi", t.toString());
                 Toast.makeText(LoginActivity.this, "Khong ket noi duoc", Toast.LENGTH_SHORT).show();
             }

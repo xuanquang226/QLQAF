@@ -23,4 +23,7 @@ public interface PayrollAPI {
 
     @GET("/api/payroll/getIdPayrollStaff")
     Call<Long> queryPayrollAndGetIdPayroll(@Query("month") int month, @Query("year") int year, @Header("Authorization") String token);
+
+    @GET("/api/payroll/checkPayrollExist")
+    Call<Boolean> checkPayrollExist(@Query("month") int month, @Query("year") int year, @Header("Authorization") String token);
 }

@@ -12,6 +12,7 @@ public class RetrofitClient {
     private static final String BASE_URL = "http://192.168.56.2:8080";
 
     private static final Gson gson = new GsonBuilder()
+            .setLenient()
             .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
             .create();
     public static Retrofit getClient(){

@@ -50,6 +50,7 @@ public class TimeKeepingActivity extends AppCompatActivity {
     private ImageView imageView;
     private Retrofit retrofit;
     private Bitmap bitmap;
+    private Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,8 +60,10 @@ public class TimeKeepingActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setBackgroundDrawable(getDrawable(R.color.moderate_blue));
 
-        Intent intent = getIntent();
+
+        intent = getIntent();
         bundle = intent.getExtras();
+
         retrofit = RetrofitClient.getClient();
 
         btnGenerate = findViewById(R.id.btn_generate);
@@ -86,15 +89,20 @@ public class TimeKeepingActivity extends AppCompatActivity {
                 call.enqueue(new Callback<Long>() {
                     @Override
                     public void onResponse(Call<Long> call, Response<Long> response) {
-                        // Tạo ra mã chấm công xong trả về id mã để tạo hình và nhân viên quét mã đó sẽ lấy idstaff và id mã đó để tạo chấm công
-                        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-                        try {
-                            BitMatrix bitMatrix = multiFormatWriter.encode(String.valueOf(response.body()), BarcodeFormat.QR_CODE, 300, 300);
-                            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-                            bitmap = barcodeEncoder.createBitmap(bitMatrix);
-                        } catch (WriterException e) {
-                            e.printStackTrace();
+                        if(response.body() != null){
+                            // Tạo ra mã chấm công xong trả về id mã để tạo hình và nhân viên quét mã đó sẽ lấy idstaff và id mã đó để tạo chấm công
+                            MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+                            try {
+                                BitMatrix bitMatrix = multiFormatWriter.encode(String.valueOf(response.body()), BarcodeFormat.QR_CODE, 300, 300);
+                                BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                                bitmap = barcodeEncoder.createBitmap(bitMatrix);
+                            } catch (WriterException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         }
+
                     }
 
                     @Override
@@ -138,7 +146,11 @@ public class TimeKeepingActivity extends AppCompatActivity {
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
-                    Toast.makeText(TimeKeepingActivity.this, response.body(), Toast.LENGTH_SHORT).show();
+                    if(response.body() != null){
+                        Toast.makeText(TimeKeepingActivity.this, response.body(), Toast.LENGTH_SHORT).show();
+                    }else{
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    }
                 }
 
                 @Override
@@ -156,68 +168,77 @@ public class TimeKeepingActivity extends AppCompatActivity {
         call.enqueue(new Callback<Staff>() {
             @Override
             public void onResponse(Call<Staff> call, Response<Staff> response) {
-                Staff staff = response.body();
-                bundle.putLong("idStaff", staff.getIdStaff());
+                if(response.body() != null){
+                    Staff staff = response.body();
+                    bundle.putLong("idStaff", staff.getIdStaff());
 
-                if (staff.getAccount().isTypeA()) {
-                    btnScanner.setVisibility(View.GONE);
+                    if (staff.getAccount().isTypeA()) {
+                        btnScanner.setVisibility(View.GONE);
 
-
-                    TimeSheetsAPI timeSheetsAPI = retrofit.create(TimeSheetsAPI.class);
-                    Call<TimeSheets> call2 = timeSheetsAPI.getTimeSheetsWithDate(bundle.getString("token"));
-                    call2.enqueue(new Callback<TimeSheets>() {
-                        @Override
-                        public void onResponse(Call<TimeSheets> call, Response<TimeSheets> response) {
-                            if (response.body() != null) {
-                                MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-                                try {
-                                    BitMatrix bitMatrix = multiFormatWriter.encode(String.valueOf(response.body().getId()), BarcodeFormat.QR_CODE, 300, 300);
-                                    BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-                                    Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-                                    imageView.setImageBitmap(bitmap);
-                                } catch (WriterException e) {
-                                    e.printStackTrace();
+                        TimeSheetsAPI timeSheetsAPI = retrofit.create(TimeSheetsAPI.class);
+                        Call<TimeSheets> call2 = timeSheetsAPI.getTimeSheetsWithDate(bundle.getString("token"));
+                        call2.enqueue(new Callback<TimeSheets>() {
+                            @Override
+                            public void onResponse(Call<TimeSheets> call, Response<TimeSheets> response) {
+                                if (response.body() != null) {
+                                    MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+                                    try {
+                                        BitMatrix bitMatrix = multiFormatWriter.encode(String.valueOf(response.body().getId()), BarcodeFormat.QR_CODE, 300, 300);
+                                        BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                                        Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+                                        imageView.setImageBitmap(bitmap);
+                                    } catch (WriterException e) {
+                                        e.printStackTrace();
+                                    }
+                                    btnGenerate.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Toast.makeText(TimeKeepingActivity.this, "Ngày mai tạo mới", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                                 }
-                                btnGenerate.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Toast.makeText(TimeKeepingActivity.this, "Ngày mai tạo mới", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<TimeSheets> call, Throwable t) {
+                            @Override
+                            public void onFailure(Call<TimeSheets> call, Throwable t) {
 
-                        }
-                    });
-                } else {
-                    btnGenerate.setVisibility(View.GONE);
-
-                    TimeSheetsStaffAPI timeSheetsStaffAPI = retrofit.create(TimeSheetsStaffAPI.class);
-                    Call<Boolean> call2 = timeSheetsStaffAPI.checkTimeKeeping(response.body().getIdStaff(), bundle.getString("token"));
-                    call2.enqueue(new Callback<Boolean>() {
-                        @Override
-                        public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                            if(response.body()){
-                                btnScanner.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        Toast.makeText(TimeKeepingActivity.this, "Bạn đã điểm danh ngày hôm nay, mời mai quay lại xin cảm ơn và chúc bạn một ngày làm việc vui vẻ đạt được hiệu suất cao", Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            }else{
-                                scanCode();
                             }
-                        }
+                        });
+                    } else {
+                        btnGenerate.setVisibility(View.GONE);
 
-                        @Override
-                        public void onFailure(Call<Boolean> call, Throwable t) {
+                        TimeSheetsStaffAPI timeSheetsStaffAPI = retrofit.create(TimeSheetsStaffAPI.class);
+                        Call<Boolean> call2 = timeSheetsStaffAPI.checkTimeKeeping(response.body().getIdStaff(), bundle.getString("token"));
+                        call2.enqueue(new Callback<Boolean>() {
+                            @Override
+                            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                                if(response.body() != null){
+                                    if(response.body()){
+                                        btnScanner.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                Toast.makeText(TimeKeepingActivity.this, "Bạn đã điểm danh ngày hôm nay, mời mai quay lại xin cảm ơn và chúc bạn một ngày làm việc vui vẻ đạt được hiệu suất cao", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                    }else{
+                                        scanCode();
+                                    }
+                                }else{
+                                    startActivity(new Intent(TimeKeepingActivity.this, MainActivity.class));
+                                }
 
-                        }
-                    });
+                            }
+
+                            @Override
+                            public void onFailure(Call<Boolean> call, Throwable t) {
+
+                            }
+                        });
+                    }
+                }else{
+                    startActivity(new Intent(TimeKeepingActivity.this, MainActivity.class));
                 }
+
             }
 
             @Override
