@@ -52,19 +52,16 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setBackgroundDrawable(getDrawable(R.color.moderate_blue));
 
 
-        if(getIntent().getExtras() != null){
+        if (getIntent().getExtras() != null) {
             intent = getIntent();
             bundle = intent.getExtras();
             Log.d("intent", "not null");
-        }else{
+        } else {
             bundle = new Bundle();
         }
 
         retrofit = RetrofitClient.getClient();
         tv_user = (TextView) findViewById(R.id.tv_name);
-
-
-
 
 
         btnOrder = (Button) findViewById(R.id.btn_order);
@@ -168,9 +165,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (typeAccount) {
-                    Toast.makeText(MainActivity.this, "Chuc nang dang duoc cap nhat", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Chức năng đang được cập nhật", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(MainActivity.this, "Tai khoan cua ban khong du dieu kien su dung chuc nang nay", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Tài khoản của bạn không đủ điều kiện sử dụng chức năng này", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -196,36 +193,36 @@ public class MainActivity extends AppCompatActivity {
                     intent.putExtras(bundle);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(MainActivity.this, "Tai khoan cua ban khong du dieu kien su dung chuc nang nay", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Tài khoản của bạn không đủ điều kiện sử dụng chức năng này", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
-    public void transPayrollActivity(){
+    public void transPayrollActivity() {
         btnPayroll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(typeAccount){
+                if (typeAccount) {
                     Intent intent = new Intent(MainActivity.this, PayrollActivity.class);
                     intent.putExtras(bundle);
                     startActivity(intent);
-                }else{
-                    Toast.makeText(MainActivity.this, "Tai khoan cua ban khong du dieu kien su dung chuc nang nay", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Tài khoản của bạn không đủ điều kiện sử dụng chức năng này", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
 
-    public void localDatabase(){
+    public void localDatabase() {
         String token;
 
         database = openOrCreateDatabase("Authorization.db", MODE_PRIVATE, null);
-        try{
+        try {
             String sql = "CREATE TABLE Auth(idToken INT, token TEXT)";
             database.execSQL(sql);
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e("Error", "Table was exist");
         }
 
@@ -237,10 +234,10 @@ public class MainActivity extends AppCompatActivity {
         // Duyệt table Auth nếu tồn tại jwt thì lấy ra gán vào biến String token để getAccount, không có dữ liệu thì insert rồi duyệt lại và gán vào String token.
         Cursor c = database.query("Auth", null, null, null, null, null, null);
 
-        if(c.moveToFirst()){
+        if (c.moveToFirst()) {
             token = c.getString(1);
             idToken = c.getInt(0);
-        }else{
+        } else {
             ContentValues values = new ContentValues();
             values.put("idToken", 1);
             values.put("token", bundle.getString("token"));
@@ -261,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void getAccount(String token, int idToken){
+    public void getAccount(String token, int idToken) {
         System.out.println(token);
 
         LoginAPI loginAPI = retrofit.create(LoginAPI.class);
@@ -271,18 +268,19 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<Account> call, Response<Account> response) {
 //                bundle.putString("username", response.body().getUsername());
 //                bundle.putString("password", response.body().getPassword());
-                if(response.body() != null) {
+                if (response.body() != null) {
                     bundle.putLong("idS", response.body().getId());
                     bundle.putString("token", token);
                     typeAccount = response.body().isTypeA();
                     getStaff(response.body().getId(), token);
-                }else{
+                } else {
                     // Token hết hạn, xoá token trong sqlite và chuyển về màn hình đăng nhập
                     database.delete("Auth", "idToken = ?", new String[]{Integer.toString(idToken)});
 
                     Toast.makeText(MainActivity.this, "Hết hạn đăng nhập bạn cần đăng nhập lại", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(MainActivity.this, IntroduceActivity.class));
-                };
+                }
+                ;
             }
 
             @Override

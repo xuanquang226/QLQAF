@@ -90,24 +90,14 @@
                     android:textSize="20sp"
                     android:layout_marginTop="25dp"
                     android:background="@drawable/btn_login_custom"/>
+
                 <Button
-                    android:id="@+id/btn_statistics"
+                    android:id="@+id/btn_timekeeping"
                     android:layout_width="wrap_content"
                     android:layout_height="80dp"
                     android:layout_below="@id/btn_payment"
                     android:layout_alignStart="@id/btn_payment"
                     android:layout_alignEnd="@id/btn_payment"
-                    android:text="@string/statistics"
-                    android:textSize="20sp"
-                    android:layout_marginTop="25dp"
-                    android:background="@drawable/btn_login_custom"/>
-                <Button
-                    android:id="@+id/btn_timekeeping"
-                    android:layout_width="wrap_content"
-                    android:layout_height="80dp"
-                    android:layout_below="@id/btn_statistics"
-                    android:layout_alignStart="@id/btn_statistics"
-                    android:layout_alignEnd="@id/btn_statistics"
                     android:text="@string/timekeeping"
                     android:textSize="20sp"
                     android:layout_marginTop="25dp"
@@ -135,8 +125,19 @@
                     android:layout_marginTop="25dp"
                     android:layout_marginBottom="25dp"
                     android:background="@drawable/btn_login_custom"
-
                     />
+
+                <Button
+                    android:id="@+id/btn_statistics"
+                    android:layout_width="wrap_content"
+                    android:layout_height="80dp"
+                    android:layout_below="@id/btn_payroll"
+                    android:layout_alignStart="@id/btn_payroll"
+                    android:layout_alignEnd="@id/btn_payroll"
+                    android:text="@string/statistics"
+                    android:textSize="20sp"
+                    android:layout_marginBottom="25dp"
+                    android:background="@drawable/btn_login_custom"/>
 
             </RelativeLayout>
         </ScrollView>
