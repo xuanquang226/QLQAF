@@ -15,15 +15,15 @@ import retrofit2.http.Query;
 
 public interface TimeSheetsStaffAPI {
 
-    @POST("api/timesheetsStaff")
+    @POST("api/timesheets-staff")
     Call<String> postTimeSheetsStaff(@Body TimeSheetsStaff timeSheetsStaff, @Query("idStaff") long idStaff, @Header("Authorization") String token);
 
-    @GET("api/timesheetsStaff/check/{idStaff}")
+    @GET("api/timesheets-staff/check/{idStaff}")
     Call<Boolean> checkTimeKeeping(@Path("idStaff") long idStaff, @Header("Authorization") String token);
 
-    @GET("api/timesheetsStaff/count")
+    @GET("api/timesheets-staff/count")
     public Map<String, Integer> countTimeSheetsStaff(@Query("idStaff") List<Long> idStaff, @Header("Authorization") String token);
 
-    @GET("api/timesheetsStaff")
+    @GET("api/timesheets-staff")
     public List<TimeSheetsStaff> getLTimeSheetsStaff(@Header("Authorization") String token);
 }
